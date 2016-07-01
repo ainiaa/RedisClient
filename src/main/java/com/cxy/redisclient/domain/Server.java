@@ -47,4 +47,8 @@ public class Server {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+        
+        public String toString() {
+            return this.getId() + " -- " + this.getName() + ":" + this.getHost() + ":" + this.getPort();
+        }
 }

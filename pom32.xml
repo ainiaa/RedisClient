@@ -4,7 +4,7 @@
 
 	<groupId>com.cxy</groupId>
 	<artifactId>redisclient</artifactId>
-	<version>win32.x86_64.2.0</version>
+	<version>win32.x86.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>redisclient</name>
@@ -15,6 +15,11 @@
 	</properties>
 
 	<dependencies>
+                <dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+                </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -22,8 +27,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.swt.org.eclipse.swt.win32.win32.x86_64.4.3.swt</groupId>
-			<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+			<groupId>org.eclipse.swt.org.eclipse.swt.win32.win32.x86.4.3.swt</groupId>
+			<artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
 			<version>4.3</version>
 		</dependency>
 		<dependency>
