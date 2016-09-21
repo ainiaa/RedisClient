@@ -17,46 +17,48 @@ import com.cxy.redisclient.presentation.RedisClient;
 import com.cxy.redisclient.presentation.component.NewDataDialog;
 
 public class NewListDialog extends NewDataDialog {
-	public NewListDialog(Shell parent, Image image, int id, String server,
-			int db, String key) {
-		super(parent, image, id, server, db, key, 966, 638, RedisClient.i18nFile.getText(I18nFile.NEWLIST), I18nFile.LIST);
-	}
 
-	@Override
-	protected NewListContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
-		return new NewListContent(id, server, db, key, dataTitle);
-	}
+    public NewListDialog(Shell parent, Image image, int id, String server,
+            int db, String key) {
+        super(parent, image, id, server, db, key, 966, 638, RedisClient.i18nFile.getText(I18nFile.NEWLIST), I18nFile.LIST);
+    }
 
-	@Override
-	protected void createContents() {
-		SelectionListener okSelection = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem[] items = ((NewListContent)dataContent).getTable().getItems();
-				String key = dataContent.getKey();
-				List<String> values = new ArrayList<String>();
+    @Override
+    protected NewListContent getDataContent(int id,
+            String server, int db, String key, String dataTitle) {
+        return new NewListContent(id, server, db, key, dataTitle);
+    }
 
-				if (items.length == 0)
-					MessageDialog.openError((Shell) shell, RedisClient.i18nFile.getText(I18nFile.ERROR),
-							RedisClient.i18nFile.getText(I18nFile.INPUTLIST));
-				else {
-					okSelected(items, key, values);
-				}
+    @Override
+    protected void createContents() {
+        SelectionListener okSelection = new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                TableItem[] items = ((NewListContent) dataContent).getTable().getItems();
+                String key = dataContent.getKey();
+                List<String> values = new ArrayList<>();
 
-			}
-		};
-		okCancel.setOkSelection(okSelection);
-		super.createContents();
-	}
+                if (items.length == 0) {
+                    MessageDialog.openError((Shell) shell, RedisClient.i18nFile.getText(I18nFile.ERROR),
+                            RedisClient.i18nFile.getText(I18nFile.INPUTLIST));
+                } else {
+                    okSelected(items, key, values);
+                }
 
-	protected void okSelected(TableItem[] items,
-			String key, List<String> values) {
-		for (TableItem item : items) {
-			if(item.getText().length() > 0)
-				values.add(item.getText());
-		}
-		setResult(new ListInfo(key, values, ((NewListContent)dataContent).isHeadTail(), ((NewListContent)dataContent).isExist(), dataContent.getTTL()));
-		shell.dispose();
-	}
+            }
+        };
+        okCancel.setOkSelection(okSelection);
+        super.createContents();
+    }
+
+    protected void okSelected(TableItem[] items,
+            String key, List<String> values) {
+        for (TableItem item : items) {
+            if (item.getText().length() > 0) {
+                values.add(item.getText());
+            }
+        }
+        setResult(new ListInfo(key, values, ((NewListContent) dataContent).isHeadTail(), ((NewListContent) dataContent).isExist(), dataContent.getTTL()));
+        shell.dispose();
+    }
 }

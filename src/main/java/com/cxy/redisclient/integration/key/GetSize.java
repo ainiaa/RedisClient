@@ -4,29 +4,30 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class GetSize extends JedisCommand {
-	private int db;
-	private String key;
-	private long size;
-	
-	public GetSize(int id, int db, String key) {
-		super(id);
-		this.db = db;
-		this.key = key;
-	}
 
-	@Override
-	protected void command() {
-		jedis.select(db);
-		size = getSize(key);
-	}
+    private final int db;
+    private final String key;
+    private long size;
 
-	public long getSize() {
-		return size;
-	}
+    public GetSize(int id, int db, String key) {
+        super(id);
+        this.db = db;
+        this.key = key;
+    }
 
-	@Override
-	public RedisVersion getSupportVersion() {
-		return RedisVersion.REDIS_1_0;
-	}
+    @Override
+    protected void command() {
+        jedis.select(db);
+        size = getSize(key);
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    @Override
+    public RedisVersion getSupportVersion() {
+        return RedisVersion.REDIS_1_0;
+    }
 
 }

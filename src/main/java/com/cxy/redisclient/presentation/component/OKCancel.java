@@ -14,51 +14,52 @@ import com.cxy.redisclient.integration.I18nFile;
 import com.cxy.redisclient.presentation.RedisClient;
 
 public class OKCancel {
-	protected Shell shell;
-	
-	public void setShell(Shell shell) {
-		this.shell = shell;
-	}
 
-	private Button btnOk;
-	
-	private SelectionListener okSelection;
-	private SelectionListener cancelSelection;
-	
-	public void setOkSelection(SelectionListener okSelection) {
-		this.okSelection = okSelection;
-	}
+    protected Shell shell;
 
-	public void setCancelSelection(SelectionListener cancelSelection) {
-		this.cancelSelection = cancelSelection;
-	}
-	
-	public OKCancel() {
-		this.cancelSelection = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				shell.dispose();
-			}
-		};
-	}
+    public void setShell(Shell shell) {
+        this.shell = shell;
+    }
 
-	protected void initContents() {
-		Composite composite_1 = new Composite(shell, SWT.NONE);
-		composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
-		composite_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
-				false, 1, 1));
+    private Button btnOk;
 
-		btnOk = new Button(composite_1, SWT.NONE);
-		btnOk.addSelectionListener(okSelection);
-		btnOk.setText(RedisClient.i18nFile.getText(I18nFile.OK));
+    private SelectionListener okSelection;
+    private SelectionListener cancelSelection;
 
-		Button btnCancel = new Button(composite_1, SWT.NONE);
-		btnCancel.addSelectionListener(cancelSelection);
-		btnCancel.setText(RedisClient.i18nFile.getText(I18nFile.CANCEL));
-	}
+    public void setOkSelection(SelectionListener okSelection) {
+        this.okSelection = okSelection;
+    }
 
-	public Button getOkButton() {
-		return btnOk;
-	}
-	
+    public void setCancelSelection(SelectionListener cancelSelection) {
+        this.cancelSelection = cancelSelection;
+    }
+
+    public OKCancel() {
+        this.cancelSelection = new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                shell.dispose();
+            }
+        };
+    }
+
+    protected void initContents() {
+        Composite composite_1 = new Composite(shell, SWT.NONE);
+        composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
+        composite_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
+                false, 1, 1));
+
+        btnOk = new Button(composite_1, SWT.NONE);
+        btnOk.addSelectionListener(okSelection);
+        btnOk.setText(RedisClient.i18nFile.getText(I18nFile.OK));
+
+        Button btnCancel = new Button(composite_1, SWT.NONE);
+        btnCancel.addSelectionListener(cancelSelection);
+        btnCancel.setText(RedisClient.i18nFile.getText(I18nFile.CANCEL));
+    }
+
+    public Button getOkButton() {
+        return btnOk;
+    }
+
 }

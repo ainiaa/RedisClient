@@ -4,30 +4,31 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class DumpKey extends JedisCommand {
-	private int db;
-	private String key;
-	private byte[] value;
-	
-	public DumpKey(int id, int db, String key) {
-		super(id);
-		this.db = db;
-		this.key = key;
-	}
 
-	public byte[] getValue() {
-		return value;
-	}
+    private final int db;
+    private final String key;
+    private byte[] value;
 
-	@Override
-	protected void command() {
-		jedis.select(db);
-		value = jedis.dump(key);
-		
-	}
+    public DumpKey(int id, int db, String key) {
+        super(id);
+        this.db = db;
+        this.key = key;
+    }
 
-	@Override
-	public RedisVersion getSupportVersion() {
-		return RedisVersion.REDIS_2_6;
-	}
+    public byte[] getValue() {
+        return value;
+    }
+
+    @Override
+    protected void command() {
+        jedis.select(db);
+        value = jedis.dump(key);
+
+    }
+
+    @Override
+    public RedisVersion getSupportVersion() {
+        return RedisVersion.REDIS_2_6;
+    }
 
 }

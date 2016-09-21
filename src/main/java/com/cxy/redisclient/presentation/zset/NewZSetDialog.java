@@ -17,53 +17,57 @@ import com.cxy.redisclient.presentation.RedisClient;
 import com.cxy.redisclient.presentation.component.NewDataDialog;
 
 public class NewZSetDialog extends NewDataDialog {
-	public NewZSetDialog(Shell parent, Image image, int id, String server,
-			int db, String key) {
-		super(parent, image, id, server, db, key, 586, 531, RedisClient.i18nFile.getText(I18nFile.NEWZSET), I18nFile.ZSET);
-		
-	}
 
-	@Override
-	protected NewZSetContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
-		return new NewZSetContent(id, server, db, key, dataTitle);
-	}
+    public NewZSetDialog(Shell parent, Image image, int id, String server,
+            int db, String key) {
+        super(parent, image, id, server, db, key, 586, 531, RedisClient.i18nFile.getText(I18nFile.NEWZSET), I18nFile.ZSET);
 
-	@Override
-	protected void createContents() {
-		SelectionListener okSelection = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem[] items = ((NewZSetContent)dataContent).getTable().getItems();
-				String key = dataContent.getKey();
-				Map<String, Double> values = new HashMap<String, Double>();
+    }
 
-				if (items.length == 0)
-					MessageDialog.openError((Shell) shell, RedisClient.i18nFile.getText(I18nFile.ERROR),
-							RedisClient.i18nFile.getText(I18nFile.INPUTZSET));
-				else {
-					okSelected(items, key, values);
-				}
+    @Override
+    protected NewZSetContent getDataContent(int id,
+            String server, int db, String key, String dataTitle) {
+        return new NewZSetContent(id, server, db, key, dataTitle);
+    }
 
-			}
-		};
-		okCancel.setOkSelection(okSelection);
-		super.createContents();
-	}
-	private void okSelected(TableItem[] items,
-			String key, Map<String, Double> values) {
-		for (TableItem item : items) {
-			if(item.getText(0).length() == 0 && item.getText(1).length() > 0)
-				throw new RuntimeException(RedisClient.i18nFile.getText(I18nFile.SCOREERROR) + item.getText(1));
-			if((item.getText(0).length() > 0))
-				try{
-					values.put(item.getText(1),	Double.valueOf(item.getText(0)));
-				}catch(NumberFormatException e){
-					throw new RuntimeException(RedisClient.i18nFile.getText(I18nFile.SCOREERROR) + e.getLocalizedMessage());
-				}
-		}
-		setResult(new ZSetInfo(key, values, dataContent.getTTL()));
-		shell.dispose();
-	}
-	
+    @Override
+    protected void createContents() {
+        SelectionListener okSelection = new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                TableItem[] items = ((NewZSetContent) dataContent).getTable().getItems();
+                String key = dataContent.getKey();
+                Map<String, Double> values = new HashMap<>();
+
+                if (items.length == 0) {
+                    MessageDialog.openError((Shell) shell, RedisClient.i18nFile.getText(I18nFile.ERROR),
+                            RedisClient.i18nFile.getText(I18nFile.INPUTZSET));
+                } else {
+                    okSelected(items, key, values);
+                }
+
+            }
+        };
+        okCancel.setOkSelection(okSelection);
+        super.createContents();
+    }
+
+    private void okSelected(TableItem[] items,
+            String key, Map<String, Double> values) {
+        for (TableItem item : items) {
+            if (item.getText(0).length() == 0 && item.getText(1).length() > 0) {
+                throw new RuntimeException(RedisClient.i18nFile.getText(I18nFile.SCOREERROR) + item.getText(1));
+            }
+            if ((item.getText(0).length() > 0)) {
+                try {
+                    values.put(item.getText(1), Double.valueOf(item.getText(0)));
+                } catch (NumberFormatException e) {
+                    throw new RuntimeException(RedisClient.i18nFile.getText(I18nFile.SCOREERROR) + e.getLocalizedMessage());
+                }
+            }
+        }
+        setResult(new ZSetInfo(key, values, dataContent.getTTL()));
+        shell.dispose();
+    }
+
 }

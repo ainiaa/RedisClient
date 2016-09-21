@@ -17,48 +17,49 @@ import com.cxy.redisclient.presentation.RedisClient;
 import com.cxy.redisclient.presentation.component.NewDataDialog;
 
 public class NewSetDialog extends NewDataDialog {
-	
-	public NewSetDialog(Shell parent, Image image, int id, String server,
-			int db, String key) {
-		super(parent, image, id, server, db, key, 691, 540, RedisClient.i18nFile.getText(I18nFile.NEWSET), I18nFile.SET);
-		
-	}
 
-	@Override
-	protected NewSetContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
-		return new NewSetContent(id, server, db, key, dataTitle);
-	}
+    public NewSetDialog(Shell parent, Image image, int id, String server,
+            int db, String key) {
+        super(parent, image, id, server, db, key, 691, 540, RedisClient.i18nFile.getText(I18nFile.NEWSET), I18nFile.SET);
 
-	@Override
-	protected void createContents() {
-		SelectionListener okSelection = new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem[] items = ((NewSetContent)dataContent).getTable().getItems();
-				String key = dataContent.getKey();
-				Set<String> values = new HashSet<String>();
+    }
 
-				if (items.length == 0)
-					MessageDialog.openError((Shell) shell, RedisClient.i18nFile.getText(I18nFile.ERROR),
-							RedisClient.i18nFile.getText(I18nFile.INPUTSET));
-				else {
-					okSelected(items, key, values);
-				}
+    @Override
+    protected NewSetContent getDataContent(int id,
+            String server, int db, String key, String dataTitle) {
+        return new NewSetContent(id, server, db, key, dataTitle);
+    }
 
-			}
-		};
-		okCancel.setOkSelection(okSelection);
-		super.createContents();
-	}
+    @Override
+    protected void createContents() {
+        SelectionListener okSelection = new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                TableItem[] items = ((NewSetContent) dataContent).getTable().getItems();
+                String key = dataContent.getKey();
+                Set<String> values = new HashSet<>();
 
-	private void okSelected(TableItem[] items,
-			String key, Set<String> values) {
-		for (TableItem item : items) {
-			if(item.getText().length() > 0)
-				values.add(item.getText());
-		}
-		setResult(new SetInfo(key, values, dataContent.getTTL()));
-		shell.dispose();
-	}
+                if (items.length == 0) {
+                    MessageDialog.openError((Shell) shell, RedisClient.i18nFile.getText(I18nFile.ERROR),
+                            RedisClient.i18nFile.getText(I18nFile.INPUTSET));
+                } else {
+                    okSelected(items, key, values);
+                }
+
+            }
+        };
+        okCancel.setOkSelection(okSelection);
+        super.createContents();
+    }
+
+    private void okSelected(TableItem[] items,
+            String key, Set<String> values) {
+        for (TableItem item : items) {
+            if (item.getText().length() > 0) {
+                values.add(item.getText());
+            }
+        }
+        setResult(new SetInfo(key, values, dataContent.getTTL()));
+        shell.dispose();
+    }
 }

@@ -6,32 +6,33 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class IsFieldExist extends JedisCommand {
-	private int db;
-	private String key;
-	private String field;
-	private boolean exist;
-	
-	public IsFieldExist(int id, int db, String key, String field) {
-		super(id);
-		this.db = db;
-		this.key = key;
-		this.field = field;
-	}
 
-	@Override
-	protected void command() {
-		jedis.select(db);
-		Set<String> fields = jedis.hkeys(key);
-		exist = fields.contains(field);
-	}
+    private final int db;
+    private final String key;
+    private final String field;
+    private boolean exist;
 
-	public boolean isExist() {
-		return exist;
-	}
+    public IsFieldExist(int id, int db, String key, String field) {
+        super(id);
+        this.db = db;
+        this.key = key;
+        this.field = field;
+    }
 
-	@Override
-	public RedisVersion getSupportVersion() {
-		return RedisVersion.REDIS_2_0;
-	}
+    @Override
+    protected void command() {
+        jedis.select(db);
+        Set<String> fields = jedis.hkeys(key);
+        exist = fields.contains(field);
+    }
+
+    public boolean isExist() {
+        return exist;
+    }
+
+    @Override
+    public RedisVersion getSupportVersion() {
+        return RedisVersion.REDIS_2_0;
+    }
 
 }

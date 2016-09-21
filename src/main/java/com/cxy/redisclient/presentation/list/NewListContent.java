@@ -20,228 +20,237 @@ import com.cxy.redisclient.presentation.component.EditListener;
 import com.cxy.redisclient.presentation.component.NewDataContent;
 
 public class NewListContent extends NewDataContent {
-	private Table table;
-	private Button btnDelete;
-	private Button btnUp;
-	private Button btnDown;
-	private boolean headTail = true;
-	private boolean exist = true;
-	private Group grpWhenListNot;
-	private Group grpValues;
-	private TableColumn tblclmnNewColumn;
-	
-	public NewListContent(int id, String server, int db, String key,
-			String dataTitle) {
-		super(id, server, db, key, dataTitle);
-	}
 
-	/**
-	 * @wbp.parser.entryPoint
-	 */
-	@Override
-	protected void initData(Composite dataComposite) {
-		grpValues = new Group(dataComposite, SWT.NONE);
-		grpValues.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4,
-				1));
-		grpValues.setText(RedisClient.i18nFile.getText(I18nFile.VALUES));
-		grpValues.setLayout(new GridLayout(4, false));
+    private Table table;
+    private Button btnDelete;
+    private Button btnUp;
+    private Button btnDown;
+    private boolean headTail = true;
+    private boolean exist = true;
+    private Group grpWhenListNot;
+    private Group grpValues;
+    private TableColumn tblclmnNewColumn;
 
-		table =  new Table(grpValues, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
-		table.setHeaderVisible(true);;
-		
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 4));
-		table.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				tableItemSelected();
-			}
-		});
-		table.setLinesVisible(true);
-		table.addListener(SWT.MouseDown, new EditListener(table, true));
+    public NewListContent(int id, String server, int db, String key,
+            String dataTitle) {
+        super(id, server, db, key, dataTitle);
+    }
 
-		tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-		tblclmnNewColumn.setText(RedisClient.i18nFile.getText(I18nFile.VALUE));
-		tblclmnNewColumn.setWidth(200);
+    /**
+     * @param dataComposite
+     * @wbp.parser.entryPoint
+     */
+    @Override
+    protected void initData(Composite dataComposite) {
+        grpValues = new Group(dataComposite, SWT.NONE);
+        grpValues.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4,
+                1));
+        grpValues.setText(RedisClient.i18nFile.getText(I18nFile.VALUES));
+        grpValues.setLayout(new GridLayout(4, false));
 
-		Button btnAdd = new Button(grpValues, SWT.NONE);
-		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-		btnAdd.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				InputDialog inputDialog = new InputDialog((Shell) shell,
-						RedisClient.i18nFile.getText(I18nFile.INPUTVALUES),
-						RedisClient.i18nFile.getText(I18nFile.LISTINPUTFORMAT), "", null);
-				if (inputDialog.open() == InputDialog.OK) {
-					String values = inputDialog.getValue();
-					String[] listValues = values.split(";");
-					TableItem item = null;
-					
-					for (String value : listValues) {
-						item = new TableItem(table, SWT.NONE);
-						item.setText(value);
-					}
-					
-					if(item != null)
-						table.setSelection(item);
-				}
-			}
-		});
-		btnAdd.setText(RedisClient.i18nFile.getText(I18nFile.ADD));
+        table = new Table(grpValues, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
+        table.setHeaderVisible(true);
 
-		btnDelete = new Button(grpValues, SWT.NONE);
-		btnDelete.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
-				1, 1));
-		btnDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem[] items = table.getSelection();
-				for (TableItem item : items) {
-					item.dispose();
-				}
-				tableItemSelected();
-			}
-		});
-		btnDelete.setEnabled(false);
-		btnDelete.setText(RedisClient.i18nFile.getText(I18nFile.DELETE));
+        table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 4));
+        table.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                tableItemSelected();
+            }
+        });
+        table.setLinesVisible(true);
+        table.addListener(SWT.MouseDown, new EditListener(table, true));
 
-		btnUp = new Button(grpValues, SWT.NONE);
-		btnUp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
-		btnUp.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem[] items = table.getItems();
-				TableItem[] selectedItems = table.getSelection();
-				String selectedText = selectedItems[0].getText();
+        tblclmnNewColumn = new TableColumn(table, SWT.NONE);
+        tblclmnNewColumn.setText(RedisClient.i18nFile.getText(I18nFile.VALUE));
+        tblclmnNewColumn.setWidth(200);
 
-				int selected = table.getSelectionIndex();
-				String upText = items[selected - 1].getText();
+        Button btnAdd = new Button(grpValues, SWT.NONE);
+        btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
+        btnAdd.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                InputDialog inputDialog = new InputDialog((Shell) shell,
+                        RedisClient.i18nFile.getText(I18nFile.INPUTVALUES),
+                        RedisClient.i18nFile.getText(I18nFile.LISTINPUTFORMAT), "", null);
+                if (inputDialog.open() == InputDialog.OK) {
+                    String values = inputDialog.getValue();
+                    String[] listValues = values.split(";");
+                    TableItem item = null;
 
-				items[selected].setText(upText);
-				items[selected - 1].setText(selectedText);
+                    for (String value : listValues) {
+                        item = new TableItem(table, SWT.NONE);
+                        item.setText(value);
+                    }
 
-				table.setSelection(selected - 1);
-				if (selected == 1)
-					tableItemSelected();
-			}
-		});
-		btnUp.setEnabled(false);
-		btnUp.setText(RedisClient.i18nFile.getText(I18nFile.UP));
+                    if (item != null) {
+                        table.setSelection(item);
+                    }
+                }
+            }
+        });
+        btnAdd.setText(RedisClient.i18nFile.getText(I18nFile.ADD));
 
-		btnDown = new Button(grpValues, SWT.NONE);
-		btnDown.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1,
-				1));
-		btnDown.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				TableItem[] items = table.getItems();
-				TableItem[] selectedItems = table.getSelection();
-				String selectedText = selectedItems[0].getText();
+        btnDelete = new Button(grpValues, SWT.NONE);
+        btnDelete.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
+                1, 1));
+        btnDelete.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                TableItem[] items = table.getSelection();
+                for (TableItem item : items) {
+                    item.dispose();
+                }
+                tableItemSelected();
+            }
+        });
+        btnDelete.setEnabled(false);
+        btnDelete.setText(RedisClient.i18nFile.getText(I18nFile.DELETE));
 
-				int selected = table.getSelectionIndex();
-				String downText = items[selected + 1].getText();
+        btnUp = new Button(grpValues, SWT.NONE);
+        btnUp.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
+        btnUp.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                TableItem[] items = table.getItems();
+                TableItem[] selectedItems = table.getSelection();
+                String selectedText = selectedItems[0].getText();
 
-				items[selected].setText(downText);
-				items[selected + 1].setText(selectedText);
+                int selected = table.getSelectionIndex();
+                String upText = items[selected - 1].getText();
 
-				table.setSelection(selected + 1);
-				if (selected == table.getItemCount() - 2)
-					tableItemSelected();
-			}
-		});
-		btnDown.setEnabled(false);
-		btnDown.setText(RedisClient.i18nFile.getText(I18nFile.DOWN));
+                items[selected].setText(upText);
+                items[selected - 1].setText(selectedText);
 
-		Group grpOrderToAdd = new Group(dataComposite, SWT.NONE);
-		grpOrderToAdd.setLayout(new GridLayout(2, false));
-		grpOrderToAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-				false, 4, 1));
-		grpOrderToAdd.setText(RedisClient.i18nFile.getText(I18nFile.LISTORDER));
+                table.setSelection(selected - 1);
+                if (selected == 1) {
+                    tableItemSelected();
+                }
+            }
+        });
+        btnUp.setEnabled(false);
+        btnUp.setText(RedisClient.i18nFile.getText(I18nFile.UP));
 
-		Button button_1 = new Button(grpOrderToAdd, SWT.RADIO);
-		button_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
-				1, 1));
-		button_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				headTail = true;
-			}
-		});
-		button_1.setSelection(true);
-		button_1.setText(RedisClient.i18nFile.getText(I18nFile.HEADTAIL));
+        btnDown = new Button(grpValues, SWT.NONE);
+        btnDown.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1,
+                1));
+        btnDown.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                TableItem[] items = table.getItems();
+                TableItem[] selectedItems = table.getSelection();
+                String selectedText = selectedItems[0].getText();
 
-		Button btnFromTailTo = new Button(grpOrderToAdd, SWT.RADIO);
-		btnFromTailTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false, 1, 1));
-		btnFromTailTo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				headTail = false;
-			}
-		});
-		btnFromTailTo.setText(RedisClient.i18nFile.getText(I18nFile.TAILHEAD));
+                int selected = table.getSelectionIndex();
+                String downText = items[selected + 1].getText();
 
-		grpWhenListNot = new Group(dataComposite, SWT.NONE);
-		grpWhenListNot.setLayout(new GridLayout(2, true));
-		grpWhenListNot.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false, 4, 1));
-		grpWhenListNot.setText(RedisClient.i18nFile.getText(I18nFile.LISTNOTEXIST));
+                items[selected].setText(downText);
+                items[selected + 1].setText(selectedText);
 
-		Button btnCreateList = new Button(grpWhenListNot, SWT.RADIO);
-		btnCreateList.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false, 1, 1));
-		btnCreateList.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				exist = true;
-			}
-		});
-		btnCreateList.setSelection(true);
-		btnCreateList.setText(RedisClient.i18nFile.getText(I18nFile.CREATELIST));
+                table.setSelection(selected + 1);
+                if (selected == table.getItemCount() - 2) {
+                    tableItemSelected();
+                }
+            }
+        });
+        btnDown.setEnabled(false);
+        btnDown.setText(RedisClient.i18nFile.getText(I18nFile.DOWN));
 
-		Button btnNothingToDo = new Button(grpWhenListNot, SWT.RADIO);
-		btnNothingToDo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-				false, 1, 1));
-		btnNothingToDo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				exist = false;
-			}
-		});
-		btnNothingToDo.setText(RedisClient.i18nFile.getText(I18nFile.DONOTHING));
-		
-	}
-	public boolean isHeadTail() {
-		return headTail;
-	}
+        Group grpOrderToAdd = new Group(dataComposite, SWT.NONE);
+        grpOrderToAdd.setLayout(new GridLayout(2, false));
+        grpOrderToAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+                false, 4, 1));
+        grpOrderToAdd.setText(RedisClient.i18nFile.getText(I18nFile.LISTORDER));
 
-	public boolean isExist() {
-		return exist;
-	}
+        Button button_1 = new Button(grpOrderToAdd, SWT.RADIO);
+        button_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false,
+                1, 1));
+        button_1.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                headTail = true;
+            }
+        });
+        button_1.setSelection(true);
+        button_1.setText(RedisClient.i18nFile.getText(I18nFile.HEADTAIL));
 
-	protected Table getTable() {
-		return table;
-	}
-	protected void tableItemSelected() {
-		TableItem[] items = table.getSelection();
-		if (items.length == 1) {
-			btnDelete.setEnabled(true);
-			if (table.getSelectionIndex() != 0)
-				btnUp.setEnabled(true);
-			else
-				btnUp.setEnabled(false);
-			if (table.getSelectionIndex() != table.getItemCount() - 1)
-				btnDown.setEnabled(true);
-			else
-				btnDown.setEnabled(false);
-		} else if (items.length > 1) {
-			btnDelete.setEnabled(true);
-			btnUp.setEnabled(false);
-			btnDown.setEnabled(false);
-		} else {
-			btnDelete.setEnabled(false);
-			btnUp.setEnabled(false);
-			btnDown.setEnabled(false);
-		}
-	}
+        Button btnFromTailTo = new Button(grpOrderToAdd, SWT.RADIO);
+        btnFromTailTo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
+                false, 1, 1));
+        btnFromTailTo.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                headTail = false;
+            }
+        });
+        btnFromTailTo.setText(RedisClient.i18nFile.getText(I18nFile.TAILHEAD));
+
+        grpWhenListNot = new Group(dataComposite, SWT.NONE);
+        grpWhenListNot.setLayout(new GridLayout(2, true));
+        grpWhenListNot.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+                false, 4, 1));
+        grpWhenListNot.setText(RedisClient.i18nFile.getText(I18nFile.LISTNOTEXIST));
+
+        Button btnCreateList = new Button(grpWhenListNot, SWT.RADIO);
+        btnCreateList.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
+                false, 1, 1));
+        btnCreateList.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                exist = true;
+            }
+        });
+        btnCreateList.setSelection(true);
+        btnCreateList.setText(RedisClient.i18nFile.getText(I18nFile.CREATELIST));
+
+        Button btnNothingToDo = new Button(grpWhenListNot, SWT.RADIO);
+        btnNothingToDo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
+                false, 1, 1));
+        btnNothingToDo.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                exist = false;
+            }
+        });
+        btnNothingToDo.setText(RedisClient.i18nFile.getText(I18nFile.DONOTHING));
+
+    }
+
+    public boolean isHeadTail() {
+        return headTail;
+    }
+
+    public boolean isExist() {
+        return exist;
+    }
+
+    protected Table getTable() {
+        return table;
+    }
+
+    protected void tableItemSelected() {
+        TableItem[] items = table.getSelection();
+        if (items.length == 1) {
+            btnDelete.setEnabled(true);
+            if (table.getSelectionIndex() != 0) {
+                btnUp.setEnabled(true);
+            } else {
+                btnUp.setEnabled(false);
+            }
+            if (table.getSelectionIndex() != table.getItemCount() - 1) {
+                btnDown.setEnabled(true);
+            } else {
+                btnDown.setEnabled(false);
+            }
+        } else if (items.length > 1) {
+            btnDelete.setEnabled(true);
+            btnUp.setEnabled(false);
+            btnDown.setEnabled(false);
+        } else {
+            btnDelete.setEnabled(false);
+            btnUp.setEnabled(false);
+            btnDown.setEnabled(false);
+        }
+    }
 
 }

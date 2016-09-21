@@ -6,19 +6,22 @@ import com.cxy.redisclient.domain.RedisVersion;
 
 public class AddSet24 extends AddSet {
 
-	public AddSet24(int id, int db, String key, Set<String> values) {
-		super(id, db, key, values);
-	}
-	public AddSet24(int id, int db, String key, String[] values) {
-		super(id, db, key, values);
-	}
-	protected void addSet() {
-		size = jedis.sadd(key, values);
-	}
+    public AddSet24(int id, int db, String key, Set<String> values) {
+        super(id, db, key, values);
+    }
 
-	@Override
-	public RedisVersion getSupportVersion() {
-		return RedisVersion.REDIS_2_4;
-	}
+    public AddSet24(int id, int db, String key, String[] values) {
+        super(id, db, key, values);
+    }
+
+    @Override
+    protected void addSet() {
+        size = jedis.sadd(key, values);
+    }
+
+    @Override
+    public RedisVersion getSupportVersion() {
+        return RedisVersion.REDIS_2_4;
+    }
 
 }

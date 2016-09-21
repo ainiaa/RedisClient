@@ -8,23 +8,24 @@ import com.cxy.redisclient.domain.RedisVersion;
 
 public class FindContainerKeys10 extends FindContainerKeys {
 
-	public FindContainerKeys10(int id, int db, String container, String keyPattern) {
-		super(id, db, container, keyPattern);
-	}
-	
-	public FindContainerKeys10(int id, int db, String container, String keyPattern, List<NodeType> valueTypes, boolean forward) {
-		super(id, db, container, keyPattern, valueTypes, forward);
-	}
+    public FindContainerKeys10(int id, int db, String container, String keyPattern) {
+        super(id, db, container, keyPattern);
+    }
 
-	protected Set<String> getResult() {
-		Set<String> nodekeys = null;
-		assert(container != null);
-		nodekeys = jedis.keys(container + keyPattern);
-		return nodekeys;
-	}
+    public FindContainerKeys10(int id, int db, String container, String keyPattern, List<NodeType> valueTypes, boolean forward) {
+        super(id, db, container, keyPattern, valueTypes, forward);
+    }
 
-	@Override
-	public RedisVersion getSupportVersion() {
-		return RedisVersion.REDIS_1_0;
-	}
+    @Override
+    protected Set<String> getResult() {
+        Set<String> nodekeys;
+        assert (container != null);
+        nodekeys = jedis.keys(container + keyPattern);
+        return nodekeys;
+    }
+
+    @Override
+    public RedisVersion getSupportVersion() {
+        return RedisVersion.REDIS_1_0;
+    }
 }

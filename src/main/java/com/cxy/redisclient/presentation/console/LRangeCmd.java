@@ -13,38 +13,38 @@ import com.cxy.redisclient.presentation.component.EditListener;
 
 public class LRangeCmd extends DataCommand {
 
-	private TableColumn tblclmnNewColumn;
+    private TableColumn tblclmnNewColumn;
 
-	public LRangeCmd(Console console, String cmd) {
-		super(console, cmd);
-	}
+    public LRangeCmd(Console console, String cmd) {
+        super(console, cmd);
+    }
 
-	@Override
-	protected void initData(Composite composite) {
-		Table table =  new Table(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.VIRTUAL);
-		table.setHeaderVisible(true);
-		
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 5));
-		table.setLinesVisible(true);
-		EditListener listener = new EditListener(table, false);
-		table.addListener(SWT.MouseDown, listener);
-		
-		tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-		tblclmnNewColumn.setText(RedisClient.i18nFile.getText(I18nFile.VALUE));
-		tblclmnNewColumn.setWidth(200);
+    @Override
+    protected void initData(Composite composite) {
+        Table table = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.VIRTUAL);
+        table.setHeaderVisible(true);
 
-		String[] data = result.getResult().split("\n");
-		
-		for(int i = 0 ; i < data.length; i ++){
-			TableItem item = new TableItem(table, SWT.NONE);
-			item.setText(data[i]);
-		}
-	}
+        table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 5));
+        table.setLinesVisible(true);
+        EditListener listener = new EditListener(table, false);
+        table.addListener(SWT.MouseDown, listener);
 
-	@Override
-	protected void refreshLangUI() {
-		tblclmnNewColumn.setText(RedisClient.i18nFile.getText(I18nFile.VALUE));
-		super.refreshLangUI();
-	}
+        tblclmnNewColumn = new TableColumn(table, SWT.NONE);
+        tblclmnNewColumn.setText(RedisClient.i18nFile.getText(I18nFile.VALUE));
+        tblclmnNewColumn.setWidth(200);
+
+        String[] data = result.getResult().split("\n");
+
+        for (String data1 : data) {
+            TableItem item = new TableItem(table, SWT.NONE);
+            item.setText(data1);
+        }
+    }
+
+    @Override
+    protected void refreshLangUI() {
+        tblclmnNewColumn.setText(RedisClient.i18nFile.getText(I18nFile.VALUE));
+        super.refreshLangUI();
+    }
 
 }
