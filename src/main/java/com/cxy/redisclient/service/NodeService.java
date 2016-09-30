@@ -286,7 +286,7 @@ public class NodeService {
         ServerService service = new ServerService();
         int amount = service.listDBs(id);
 
-        Set<Node> nodes = new TreeSet<Node>();
+        Set<Node> nodes = new TreeSet<>();
 
         if (forward) {
             for (int i = 0; i < amount; i++) {

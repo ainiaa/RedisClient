@@ -139,11 +139,11 @@ public class RedisClient {
     private Menu menuView;
     private Menu menuTool;
 
-    private MenuItem mntmNameOrder;
-    private MenuItem mntmTypeOrder;
-    private MenuItem mntmSizeOrder;
-    private MenuItem mntmAscend;
-    private MenuItem mntmDescend;
+    private MenuItem menuViewOrderbyName;
+    private MenuItem menuViewOrderbyType;
+    private MenuItem menuViewOrderbySize;
+    private MenuItem menuViewOrderAscend;
+    private MenuItem menuViewOrderDescend;
 
     private final ServerService serverService = new ServerService();
     private final NodeService nodeService = new NodeService();
@@ -1472,136 +1472,162 @@ public class RedisClient {
     }
 
     private void initMenu() {
+        //top menu 
         menu = new Menu(shell, SWT.BAR);
         shell.setMenuBar(menu);
 
-        MenuItem mntmServer = new MenuItem(menu, SWT.CASCADE);
-        mntmServer.setText(i18nFile.getText(I18nFile.SERVER));
+        //top menu => Server start
+        MenuItem topMenuServer = new MenuItem(menu, SWT.CASCADE);
+        topMenuServer.setText(i18nFile.getText(I18nFile.SERVER));
 
-        menuServer = new Menu(mntmServer);
-        mntmServer.setMenu(menuServer);
+        menuServer = new Menu(topMenuServer);
+        topMenuServer.setMenu(menuServer);
 
-        MenuItem mntmNew = new MenuItem(menuServer, SWT.NONE);
-        mntmNew.addSelectionListener(new SelectionAdapter() {
+        //Server =》 Add start
+        MenuItem menuServerAdd = new MenuItem(menuServer, SWT.NONE);
+        menuServerAdd.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
                 addServer();
             }
         });
-        mntmNew.setText(i18nFile.getText(I18nFile.ADD));
+        menuServerAdd.setText(i18nFile.getText(I18nFile.ADD));
+        //Server =》 Add end
 
-        MenuItem mntmEdit = new MenuItem(menuServer, SWT.NONE);
-        mntmEdit.setEnabled(false);
-        mntmEdit.addSelectionListener(new SelectionAdapter() {
+        //Server =》 Update start
+        MenuItem menuServerUpdate = new MenuItem(menuServer, SWT.NONE);
+        menuServerUpdate.setEnabled(false);
+        menuServerUpdate.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 updateServer();
             }
         });
-        mntmEdit.setText(i18nFile.getText(I18nFile.UPDATE));
+        menuServerUpdate.setText(i18nFile.getText(I18nFile.UPDATE));
+        //Server =》 Update end
 
-        MenuItem mntmDelete_1 = new MenuItem(menuServer, SWT.NONE);
-        mntmDelete_1.setEnabled(false);
-        mntmDelete_1.addSelectionListener(new SelectionAdapter() {
+        //Server =》 Remove start
+        MenuItem menuServerRemove = new MenuItem(menuServer, SWT.NONE);
+        menuServerRemove.setEnabled(false);
+        menuServerRemove.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
                 removeServer();
             }
         });
-        mntmDelete_1.setText(i18nFile.getText(I18nFile.REMOVE));
+        menuServerRemove.setText(i18nFile.getText(I18nFile.REMOVE));
+        //Server =》 Remove end
 
-        MenuItem mntmProperties = new MenuItem(menuServer, SWT.NONE);
-        mntmProperties.addSelectionListener(new SelectionAdapter() {
+        //Server =》 Properties start
+        MenuItem menuServerProperties = new MenuItem(menuServer, SWT.NONE);
+        menuServerProperties.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 serverProperties();
             }
         });
-        mntmProperties.setEnabled(false);
-        mntmProperties.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        menuServerProperties.setEnabled(false);
+        menuServerProperties.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        //Server =》 Properties end
+        
+        new MenuItem(menuServer, SWT.SEPARATOR); //Server 分隔符
 
-        new MenuItem(menuServer, SWT.SEPARATOR);
-
-        MenuItem mntmExit = new MenuItem(menuServer, SWT.NONE);
-        mntmExit.addSelectionListener(new SelectionAdapter() {
+        //Server =》 Exit start
+        MenuItem menuServerExit = new MenuItem(menuServer, SWT.NONE);
+        menuServerExit.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
                 shell.close();
             }
         });
-        mntmExit.setText(i18nFile.getText(I18nFile.EXIT));
+        menuServerExit.setText(i18nFile.getText(I18nFile.EXIT));
+        //Server =》 Exit end
+        //top menu => Server end
+        
+        //top menu => Data start
+        MenuItem topMenuItemData = new MenuItem(menu, SWT.CASCADE);
+        topMenuItemData.setText(i18nFile.getText(I18nFile.DATA));
 
-        MenuItem mntmData = new MenuItem(menu, SWT.CASCADE);
-        mntmData.setText(i18nFile.getText(I18nFile.DATA));
+        menuData = new Menu(topMenuItemData);
+        topMenuItemData.setMenu(menuData);
 
-        menuData = new Menu(mntmData);
-        mntmData.setMenu(menuData);
+        //Data =》 New start
+        MenuItem menuItemDataNew = new MenuItem(menuData, SWT.CASCADE);
+        menuItemDataNew.setEnabled(false);
+        menuItemDataNew.setText(i18nFile.getText(I18nFile.NEW));
 
-        MenuItem mntmAdd = new MenuItem(menuData, SWT.CASCADE);
-        mntmAdd.setEnabled(false);
-        mntmAdd.setText(i18nFile.getText(I18nFile.NEW));
+        Menu menuDataNew = new Menu(menuItemDataNew);
+        menuItemDataNew.setMenu(menuDataNew);
 
-        Menu menu_5 = new Menu(mntmAdd);
-        mntmAdd.setMenu(menu_5);
-
-        MenuItem mntmString = new MenuItem(menu_5, SWT.NONE);
-        mntmString.addSelectionListener(new SelectionAdapter() {
+        //Data =》 New =》 String start
+        MenuItem menuDataNewString = new MenuItem(menuDataNew, SWT.NONE);
+        menuDataNewString.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newString();
             }
         });
-        mntmString.setText(i18nFile.getText(I18nFile.STRING) + "\tAlt+1");
-        mntmString.setAccelerator(SWT.ALT + '1');
-        mntmString.setImage(strImage);
-
-        MenuItem mntmList = new MenuItem(menu_5, SWT.NONE);
-        mntmList.addSelectionListener(new SelectionAdapter() {
+        menuDataNewString.setText(i18nFile.getText(I18nFile.STRING) + "\tAlt+1");
+        menuDataNewString.setAccelerator(SWT.ALT + '1');
+        menuDataNewString.setImage(strImage);
+        //Data =》 New =》 String end
+        
+        //Data =》 New =》 List start
+        MenuItem menuDataNewList = new MenuItem(menuDataNew, SWT.NONE);
+        menuDataNewList.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newList();
             }
         });
-        mntmList.setText(i18nFile.getText(I18nFile.LIST) + "\tAlt+2");
-        mntmList.setAccelerator(SWT.ALT + '2');
-        mntmList.setImage(listImage);
-
-        MenuItem mntmSet = new MenuItem(menu_5, SWT.NONE);
-        mntmSet.addSelectionListener(new SelectionAdapter() {
+        menuDataNewList.setText(i18nFile.getText(I18nFile.LIST) + "\tAlt+2");
+        menuDataNewList.setAccelerator(SWT.ALT + '2');
+        menuDataNewList.setImage(listImage);
+        //Data =》 New =》 List end
+        
+        //Data =》 New =》 Set start
+        MenuItem menuDataNewSet = new MenuItem(menuDataNew, SWT.NONE);
+        menuDataNewSet.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newSet();
             }
         });
-        mntmSet.setText(i18nFile.getText(I18nFile.SET) + "\tAlt+3");
-        mntmSet.setAccelerator(SWT.ALT + '3');
-        mntmSet.setImage(setImage);
-
-        MenuItem mntmSortset = new MenuItem(menu_5, SWT.NONE);
-        mntmSortset.addSelectionListener(new SelectionAdapter() {
+        menuDataNewSet.setText(i18nFile.getText(I18nFile.SET) + "\tAlt+3");
+        menuDataNewSet.setAccelerator(SWT.ALT + '3');
+        menuDataNewSet.setImage(setImage);
+        //Data =》 New =》 Set end
+        
+        //Data =》 New =》 Sorted set start
+        MenuItem menuDataNewSortset = new MenuItem(menuDataNew, SWT.NONE);
+        menuDataNewSortset.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newZSet();
             }
         });
-        mntmSortset.setText(i18nFile.getText(I18nFile.ZSET) + "\tAlt+4");
-        mntmSortset.setAccelerator(SWT.ALT + '4');
-        mntmSortset.setImage(zsetImage);
-
-        MenuItem mntmHash = new MenuItem(menu_5, SWT.NONE);
-        mntmHash.addSelectionListener(new SelectionAdapter() {
+        menuDataNewSortset.setText(i18nFile.getText(I18nFile.ZSET) + "\tAlt+4");
+        menuDataNewSortset.setAccelerator(SWT.ALT + '4');
+        menuDataNewSortset.setImage(zsetImage);
+        //Data =》 New =》 Sorted set end
+        
+        //Data =》 New =》 hash start
+        MenuItem menuDataNewHash = new MenuItem(menuDataNew, SWT.NONE);
+        menuDataNewHash.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newHash();
             }
         });
-        mntmHash.setText(i18nFile.getText(I18nFile.HASH) + "\tAlt+5");
-        mntmHash.setAccelerator(SWT.ALT + '5');
-        mntmHash.setImage(hashImage);
-
-        MenuItem mntmRename_2 = new MenuItem(menuData, SWT.NONE);
-        mntmRename_2.setEnabled(false);
-        mntmRename_2.addSelectionListener(new SelectionAdapter() {
+        menuDataNewHash.setText(i18nFile.getText(I18nFile.HASH) + "\tAlt+5");
+        menuDataNewHash.setAccelerator(SWT.ALT + '5');
+        menuDataNewHash.setImage(hashImage);
+        //Data =》 New =》 hash end
+        
+        //Data =》 Rename start
+        MenuItem menuDataRename = new MenuItem(menuData, SWT.NONE);
+        menuDataRename.setEnabled(false);
+        menuDataRename.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (itemsSelected[0] instanceof TreeItem) {
@@ -1611,11 +1637,13 @@ public class RedisClient {
                 }
             }
         });
-        mntmRename_2.setText(i18nFile.getText(I18nFile.RENAME));
+        menuDataRename.setText(i18nFile.getText(I18nFile.RENAME));
+        //Data =》 Rename end
 
-        MenuItem mntmDelete_3 = new MenuItem(menuData, SWT.NONE);
-        mntmDelete_3.setEnabled(false);
-        mntmDelete_3.addSelectionListener(new SelectionAdapter() {
+        //Data =》 Delete start
+        MenuItem menuDataDelete = new MenuItem(menuData, SWT.NONE);
+        menuDataDelete.setEnabled(false);
+        menuDataDelete.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (itemsSelected[0] instanceof TreeItem) {
@@ -1634,10 +1662,12 @@ public class RedisClient {
 
             }
         });
-        mntmDelete_3.setText(i18nFile.getText(I18nFile.DELETE));
-
-        MenuItem mntmProperties_2 = new MenuItem(menuData, SWT.NONE);
-        mntmProperties_2.addSelectionListener(new SelectionAdapter() {
+        menuDataDelete.setText(i18nFile.getText(I18nFile.DELETE));
+        //Data =》 Delete start
+        
+        //Data =》 Properties start
+        MenuItem menuDataProperties = new MenuItem(menuData, SWT.NONE);
+        menuDataProperties.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 NodeType type = (NodeType) itemsSelected[0].getData(NODE_TYPE);
@@ -1650,113 +1680,133 @@ public class RedisClient {
 
             }
         });
-        mntmProperties_2.setEnabled(false);
-        mntmProperties_2.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        menuDataProperties.setEnabled(false);
+        menuDataProperties.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        //Data =》 Properties end
+        
+        new MenuItem(menuData, SWT.SEPARATOR);//分隔符
 
-        new MenuItem(menuData, SWT.SEPARATOR);
-
-        MenuItem mntmcut = new MenuItem(menuData, SWT.NONE);
-        mntmcut.addSelectionListener(new SelectionAdapter() {
+        //Data =》 Cut start
+        MenuItem menuDataCut = new MenuItem(menuData, SWT.NONE);
+        menuDataCut.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 cut();
             }
         });
-        mntmcut.setEnabled(false);
-        mntmcut.setText(i18nFile.getText(I18nFile.CUT) + "\tCtrl+X");
-        mntmcut.setAccelerator(SWT.CTRL + 'X');
-
-        MenuItem mntmCopy = new MenuItem(menuData, SWT.NONE);
-        mntmCopy.addSelectionListener(new SelectionAdapter() {
+        menuDataCut.setEnabled(false);
+        menuDataCut.setText(i18nFile.getText(I18nFile.CUT) + "\tCtrl+X");
+        menuDataCut.setAccelerator(SWT.CTRL + 'X');
+        //Data =》 Cut end
+        
+        //Data =》 Copy start
+        MenuItem menuDataCopy = new MenuItem(menuData, SWT.NONE);
+        menuDataCopy.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 copy();
             }
         });
-        mntmCopy.setEnabled(false);
-        mntmCopy.setText(i18nFile.getText(I18nFile.COPY) + "\tCtrl+C");
-        mntmCopy.setAccelerator(SWT.CTRL + 'C');
-
-        MenuItem mntmPaste = new MenuItem(menuData, SWT.NONE);
-        mntmPaste.addSelectionListener(new SelectionAdapter() {
+        menuDataCopy.setEnabled(false);
+        menuDataCopy.setText(i18nFile.getText(I18nFile.COPY) + "\tCtrl+C");
+        menuDataCopy.setAccelerator(SWT.CTRL + 'C');
+        //Data =》 Copy end
+        
+        //Data =》 Paste start 
+        MenuItem menuDataPaste = new MenuItem(menuData, SWT.NONE);
+        menuDataPaste.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 paste();
             }
         });
-        mntmPaste.setEnabled(false);
-        mntmPaste.setText(i18nFile.getText(I18nFile.PASTE) + "\tCtrl+V");
-        mntmPaste.setAccelerator(SWT.CTRL + 'V');
+        menuDataPaste.setEnabled(false);
+        menuDataPaste.setText(i18nFile.getText(I18nFile.PASTE) + "\tCtrl+V");
+        menuDataPaste.setAccelerator(SWT.CTRL + 'V');
+        //Data =》 Paste end
+        
+        new MenuItem(menuData, SWT.SEPARATOR);//分隔符
 
-        new MenuItem(menuData, SWT.SEPARATOR);
-
-        MenuItem mntmImport = new MenuItem(menuData, SWT.NONE);
-        mntmImport.addSelectionListener(new SelectionAdapter() {
+        //Data =》 Import start 
+        MenuItem menuDataImport = new MenuItem(menuData, SWT.NONE);
+        menuDataImport.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 importFile();
             }
         });
-        mntmImport.setEnabled(false);
-        mntmImport.setText(i18nFile.getText(I18nFile.IMPORT));
-
-        MenuItem mntmExport = new MenuItem(menuData, SWT.NONE);
-        mntmExport.addSelectionListener(new SelectionAdapter() {
+        menuDataImport.setEnabled(false);
+        menuDataImport.setText(i18nFile.getText(I18nFile.IMPORT));
+        //Data =》 Import end 
+        //Data =》 Export start 
+        MenuItem menuDataExport = new MenuItem(menuData, SWT.NONE);
+        menuDataExport.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
                 export();
             }
         });
-        mntmExport.setEnabled(false);
-        mntmExport.setText(i18nFile.getText(I18nFile.EXPORT));
+        menuDataExport.setEnabled(false);
+        menuDataExport.setText(i18nFile.getText(I18nFile.EXPORT));
+        //Data =》 Export end
+        
+        new MenuItem(menuData, SWT.SEPARATOR); //分隔符
 
-        new MenuItem(menuData, SWT.SEPARATOR);
-
-        MenuItem mntmFind_2 = new MenuItem(menuData, SWT.NONE);
-        mntmFind_2.addSelectionListener(new SelectionAdapter() {
+        //Data =》 Find start
+        MenuItem menuDataFind = new MenuItem(menuData, SWT.NONE);
+        menuDataFind.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 find();
             }
         });
-        mntmFind_2.setText(i18nFile.getText(I18nFile.FIND) + "\tCtrl+F");
-        mntmFind_2.setAccelerator(SWT.CTRL + 'F');
-
-        MenuItem mntmFindNext_2 = new MenuItem(menuData, SWT.NONE);
-        mntmFindNext_2.addSelectionListener(new SelectionAdapter() {
+        menuDataFind.setText(i18nFile.getText(I18nFile.FIND) + "\tCtrl+F");
+        menuDataFind.setAccelerator(SWT.CTRL + 'F');
+        //Data =》 Find end
+        
+        //Data =》 Find forward start
+        MenuItem menuDataFindForward = new MenuItem(menuData, SWT.NONE);
+        menuDataFindForward.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 findForward();
             }
         });
-        mntmFindNext_2.setText(i18nFile.getText(I18nFile.FINDFORWARD) + "\tF3");
-        mntmFindNext_2.setAccelerator(SWT.F3);
-
-        MenuItem mntmFindBackward_1 = new MenuItem(menuData, SWT.NONE);
-        mntmFindBackward_1.addSelectionListener(new SelectionAdapter() {
+        menuDataFindForward.setText(i18nFile.getText(I18nFile.FINDFORWARD) + "\tF3");
+        menuDataFindForward.setAccelerator(SWT.F3);
+        //Data =》 Find forward end
+        
+        //Data =》 Find backward start
+        MenuItem menuDataFindBackward = new MenuItem(menuData, SWT.NONE);
+        menuDataFindBackward.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 findBackward();
             }
         });
-        mntmFindBackward_1.setText(i18nFile.getText(I18nFile.FINDBACKWARD)
+        menuDataFindBackward.setText(i18nFile.getText(I18nFile.FINDBACKWARD)
                 + "\tCtrl+F3");
-        mntmFindBackward_1.setAccelerator(SWT.CTRL + SWT.F3);
+        menuDataFindBackward.setAccelerator(SWT.CTRL + SWT.F3);
+        //Data =》 Find backward end
+        //top menu => Data end
+        
+        //top menu => View start
+        MenuItem topMenuItemView = new MenuItem(menu, SWT.CASCADE);
+        topMenuItemView.setText(i18nFile.getText(I18nFile.VIEW));
 
-        MenuItem mntmView = new MenuItem(menu, SWT.CASCADE);
-        mntmView.setText(i18nFile.getText(I18nFile.VIEW));
+        menuView = new Menu(topMenuItemView);
+        topMenuItemView.setMenu(menuView);
 
-        menuView = new Menu(mntmView);
-        mntmView.setMenu(menuView);
+        //View =》 Container start
+        MenuItem menuItemViewContainer = new MenuItem(menuView, SWT.CASCADE);
+        menuItemViewContainer.setText(i18nFile.getText(I18nFile.CONTAINER));
 
-        MenuItem mntmNewSubmenu = new MenuItem(menuView, SWT.CASCADE);
-        mntmNewSubmenu.setText(i18nFile.getText(I18nFile.CONTAINER));
+        Menu menuViewContainer = new Menu(menuItemViewContainer);
+        menuItemViewContainer.setMenu(menuViewContainer);
 
-        Menu menu_3 = new Menu(mntmNewSubmenu);
-        mntmNewSubmenu.setMenu(menu_3);
-
-        MenuItem mntmHierarchy = new MenuItem(menu_3, SWT.RADIO);
-        mntmHierarchy.addSelectionListener(new SelectionAdapter() {
+        //View =》 Container => Hierarchy start
+        MenuItem menuViewHierarchy = new MenuItem(menuViewContainer, SWT.RADIO);
+        menuViewHierarchy.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (flatView == true) {
@@ -1770,10 +1820,12 @@ public class RedisClient {
                 }
             }
         });
-        mntmHierarchy.setText(i18nFile.getText(I18nFile.HIERARCHY));
-
-        MenuItem mntmFlat = new MenuItem(menu_3, SWT.RADIO);
-        mntmFlat.addSelectionListener(new SelectionAdapter() {
+        menuViewHierarchy.setText(i18nFile.getText(I18nFile.HIERARCHY));
+        //View =》 Container => Hierarchy end
+        
+        //View =》 Container => Flat start
+        MenuItem menuViewFlat = new MenuItem(menuViewContainer, SWT.RADIO);
+        menuViewFlat.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (flatView == false) {
@@ -1787,56 +1839,67 @@ public class RedisClient {
                 }
             }
         });
-        mntmFlat.setText(i18nFile.getText(I18nFile.FLAT));
+        menuViewFlat.setText(i18nFile.getText(I18nFile.FLAT));
+        //View =》 Container => Flat start
+        
         if (!flatView) {
-            mntmHierarchy.setSelection(true);
+            menuViewHierarchy.setSelection(true);
         }
         if (flatView) {
-            mntmFlat.setSelection(true);
+            menuViewFlat.setSelection(true);
         }
 
-        MenuItem mntmOrderBy = new MenuItem(menuView, SWT.CASCADE);
-        mntmOrderBy.setText(i18nFile.getText(I18nFile.ORDERBY));
+        //View =》 Order by  start
+        MenuItem menuItemViewOrderBy = new MenuItem(menuView, SWT.CASCADE);
+        menuItemViewOrderBy.setText(i18nFile.getText(I18nFile.ORDERBY));
 
-        Menu menu_7 = new Menu(mntmOrderBy);
-        mntmOrderBy.setMenu(menu_7);
+        Menu menuViewOrderBy = new Menu(menuItemViewOrderBy);
+        menuItemViewOrderBy.setMenu(menuViewOrderBy);
 
-        mntmNameOrder = new MenuItem(menu_7, SWT.RADIO);
-        mntmNameOrder.addSelectionListener(new SelectionAdapter() {
+        //View =》 Order by => Name start
+        menuViewOrderbyName = new MenuItem(menuViewOrderBy, SWT.RADIO);
+        menuViewOrderbyName.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 orderMenuSelected(OrderBy.NAME);
             }
         });
-        mntmNameOrder.setText(i18nFile.getText(I18nFile.NAME));
-
-        mntmTypeOrder = new MenuItem(menu_7, SWT.RADIO);
-        mntmTypeOrder.addSelectionListener(new SelectionAdapter() {
+        menuViewOrderbyName.setText(i18nFile.getText(I18nFile.NAME));
+        //View =》 Order by => Name end
+        
+        //View =》 Order by => Type start
+        menuViewOrderbyType = new MenuItem(menuViewOrderBy, SWT.RADIO);
+        menuViewOrderbyType.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 orderMenuSelected(OrderBy.TYPE);
             }
         });
-        mntmTypeOrder.setText(i18nFile.getText(I18nFile.TYPE));
-
-        mntmSizeOrder = new MenuItem(menu_7, SWT.RADIO);
-        mntmSizeOrder.addSelectionListener(new SelectionAdapter() {
+        menuViewOrderbyType.setText(i18nFile.getText(I18nFile.TYPE));
+        //View =》 Order by => Type end
+        
+        //View =》 Order by => Size start
+        menuViewOrderbySize = new MenuItem(menuViewOrderBy, SWT.RADIO);
+        menuViewOrderbySize.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 orderMenuSelected(OrderBy.SIZE);
             }
         });
-        mntmSizeOrder.setText(i18nFile.getText(I18nFile.SIZE));
+        menuViewOrderbySize.setText(i18nFile.getText(I18nFile.SIZE));
+        //View =》 Order by => Size end
+        
         updateOrderby();
+        //View =》 Order start
+        MenuItem menuItemViewOrder = new MenuItem(menuView, SWT.CASCADE);
+        menuItemViewOrder.setText(i18nFile.getText(I18nFile.ORDER));
 
-        MenuItem mntmOrder = new MenuItem(menuView, SWT.CASCADE);
-        mntmOrder.setText(i18nFile.getText(I18nFile.ORDER));
+        Menu menuViewOrder = new Menu(menuItemViewOrder);
+        menuItemViewOrder.setMenu(menuViewOrder);
 
-        Menu menu_6 = new Menu(mntmOrder);
-        mntmOrder.setMenu(menu_6);
-
-        mntmAscend = new MenuItem(menu_6, SWT.RADIO);
-        mntmAscend.addSelectionListener(new SelectionAdapter() {
+        //View =》 Order  => Ascend start
+        menuViewOrderAscend = new MenuItem(menuViewOrder, SWT.RADIO);
+        menuViewOrderAscend.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (clientOrder == Order.Descend) {
@@ -1844,10 +1907,12 @@ public class RedisClient {
                 }
             }
         });
-        mntmAscend.setText(i18nFile.getText(I18nFile.ASCEND));
-
-        mntmDescend = new MenuItem(menu_6, SWT.RADIO);
-        mntmDescend.addSelectionListener(new SelectionAdapter() {
+        menuViewOrderAscend.setText(i18nFile.getText(I18nFile.ASCEND));
+        //View =》 Order  => Ascend end
+        
+        //View =》 Order  => Descend start
+        menuViewOrderDescend = new MenuItem(menuViewOrder, SWT.RADIO);
+        menuViewOrderDescend.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (clientOrder == Order.Ascend) {
@@ -1855,18 +1920,21 @@ public class RedisClient {
                 }
             }
         });
-        mntmDescend.setText(i18nFile.getText(I18nFile.DESCEND));
-
+        menuViewOrderDescend.setText(i18nFile.getText(I18nFile.DESCEND));
+        //View =》 Order  => Descend end
+        
         updateOrder();
 
-        MenuItem mntmNewSubmenu_1 = new MenuItem(menuView, SWT.CASCADE);
-        mntmNewSubmenu_1.setText(i18nFile.getText(I18nFile.LANGUAGE));
+        //View =》Language start
+        MenuItem menuItemViewLanguage = new MenuItem(menuView, SWT.CASCADE);
+        menuItemViewLanguage.setText(i18nFile.getText(I18nFile.LANGUAGE));
 
-        Menu menu_4 = new Menu(mntmNewSubmenu_1);
-        mntmNewSubmenu_1.setMenu(menu_4);
+        Menu menuViewLanguage = new Menu(menuItemViewLanguage);
+        menuItemViewLanguage.setMenu(menuViewLanguage);
 
-        MenuItem mntmEnglish = new MenuItem(menu_4, SWT.RADIO);
-        mntmEnglish.addSelectionListener(new SelectionAdapter() {
+        //View =》Language => English start
+        MenuItem menuViewLanguageEnglish = new MenuItem(menuViewLanguage, SWT.RADIO);
+        menuViewLanguageEnglish.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (language == Language.Chinese) {
@@ -1875,10 +1943,12 @@ public class RedisClient {
                 }
             }
         });
-        mntmEnglish.setText("English");
+        menuViewLanguageEnglish.setText("English");
+        //View =》Language => English start
 
-        MenuItem menuItem = new MenuItem(menu_4, SWT.RADIO);
-        menuItem.addSelectionListener(new SelectionAdapter() {
+        //View =》Language => 中文 start
+        MenuItem menuViewLanguageChinese = new MenuItem(menuViewLanguage, SWT.RADIO);
+        menuViewLanguageChinese.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 if (language == Language.English) {
@@ -1887,18 +1957,21 @@ public class RedisClient {
                 }
             }
         });
-        menuItem.setText("中文");
+        menuViewLanguageChinese.setText("中文");
+        //View =》Language => 中文 end
+        
         if (language == Language.English) {
-            mntmEnglish.setSelection(true);
+            menuViewLanguageEnglish.setSelection(true);
         }
         if (language == Language.Chinese) {
-            menuItem.setSelection(true);
+            menuViewLanguageChinese.setSelection(true);
         }
 
-        new MenuItem(menuView, SWT.SEPARATOR);
+        new MenuItem(menuView, SWT.SEPARATOR);//分隔符
 
-        MenuItem menuItem_1 = new MenuItem(menuView, SWT.NONE);
-        menuItem_1.addSelectionListener(new SelectionAdapter() {
+        //View =》 Refresh start
+        MenuItem menuItemViewRefresh = new MenuItem(menuView, SWT.NONE);
+        menuItemViewRefresh.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 refreshOrder();
@@ -1906,71 +1979,87 @@ public class RedisClient {
                 treeItemSelected(true);
             }
         });
-        menuItem_1.setText(i18nFile.getText(I18nFile.REFRESH) + "\tF5");
-        menuItem_1.setAccelerator(SWT.F5);
+        menuItemViewRefresh.setText(i18nFile.getText(I18nFile.REFRESH) + "\tF5");
+        menuItemViewRefresh.setAccelerator(SWT.F5);
+        //View =》 Refresh end
+        //top menu => View end
+        
+         //top menu => Tools start
+        MenuItem topMenuItemTools = new MenuItem(menu, SWT.CASCADE);
+        topMenuItemTools.setText(i18nFile.getText(I18nFile.TOOL));
 
-        MenuItem mntmTool = new MenuItem(menu, SWT.CASCADE);
-        mntmTool.setText(i18nFile.getText(I18nFile.TOOL));
+        menuTool = new Menu(topMenuItemTools);
+        topMenuItemTools.setMenu(menuTool);
 
-        menuTool = new Menu(mntmTool);
-        mntmTool.setMenu(menuTool);
-
-        MenuItem mntmNewItem = new MenuItem(menuTool, SWT.NONE);
-        mntmNewItem.addSelectionListener(new SelectionAdapter() {
+        //Tools =》 Console start
+        MenuItem menuToolsConsole = new MenuItem(menuTool, SWT.NONE);
+        menuToolsConsole.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 console();
             }
         });
-        mntmNewItem.setText(i18nFile.getText(I18nFile.CONSOLE));
-
-        MenuItem mntmPublish = new MenuItem(menuTool, SWT.NONE);
-        mntmPublish.addSelectionListener(new SelectionAdapter() {
+        menuToolsConsole.setText(i18nFile.getText(I18nFile.CONSOLE));
+        //Tools =》 Console end
+        
+        //Tools =》 Publish start
+        MenuItem menuToolsPublish = new MenuItem(menuTool, SWT.NONE);
+        menuToolsPublish.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 publish();
             }
         });
-        mntmPublish.setText(i18nFile.getText(I18nFile.PUBLISH));
-
-        MenuItem mntmSubscribe = new MenuItem(menuTool, SWT.NONE);
-        mntmSubscribe.addSelectionListener(new SelectionAdapter() {
+        menuToolsPublish.setText(i18nFile.getText(I18nFile.PUBLISH));
+        //Tools =》 Publish end
+        
+        //Tools =》 Subscribe start
+        MenuItem menuToolsSubscribe = new MenuItem(menuTool, SWT.NONE);
+        menuToolsSubscribe.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 subscribe();
             }
         });
-        mntmSubscribe.setText(i18nFile.getText(I18nFile.SUBSCRIBE));
+        menuToolsSubscribe.setText(i18nFile.getText(I18nFile.SUBSCRIBE));
+        //Tools =》 Subscribe end
+        
+        new MenuItem(menuTool, SWT.SEPARATOR);//分隔符
 
-        new MenuItem(menuTool, SWT.SEPARATOR);
-
-        MenuItem mntmOptions = new MenuItem(menuTool, SWT.NONE);
-        mntmOptions.addSelectionListener(new SelectionAdapter() {
+        //Tools =》 Options start
+        MenuItem menuToolsOptions = new MenuItem(menuTool, SWT.NONE);
+        menuToolsOptions.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 options();
             }
         });
-        mntmOptions.setText(i18nFile.getText(I18nFile.OPTIONS));
+        menuToolsOptions.setText(i18nFile.getText(I18nFile.OPTIONS));
+        //Tools =》 Options end
+        //top menu => Tools end
+        
+        //top menu => Favorites start
+        MenuItem menuItemFavorites = new MenuItem(menu, SWT.CASCADE);
+        menuItemFavorites.setText(i18nFile.getText(I18nFile.FAVORITES));
 
-        MenuItem mntmFavorites = new MenuItem(menu, SWT.CASCADE);
-        mntmFavorites.setText(i18nFile.getText(I18nFile.FAVORITES));
+        menuFavorite = new Menu(menuItemFavorites);
+        menuItemFavorites.setMenu(menuFavorite);
 
-        menuFavorite = new Menu(mntmFavorites);
-        mntmFavorites.setMenu(menuFavorite);
-
-        MenuItem mntmAdd_Favorite = new MenuItem(menuFavorite, SWT.NONE);
-        mntmAdd_Favorite.setEnabled(false);
-        mntmAdd_Favorite.addSelectionListener(new SelectionAdapter() {
+        //Favorite =》 Add start
+        MenuItem menuFavoriteAdd = new MenuItem(menuFavorite, SWT.NONE);
+        menuFavoriteAdd.setEnabled(false);
+        menuFavoriteAdd.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 addFavorite();
             }
         });
-        mntmAdd_Favorite.setText(i18nFile.getText(I18nFile.ADD));
-
-        MenuItem mntmOrganize = new MenuItem(menuFavorite, SWT.NONE);
-        mntmOrganize.addSelectionListener(new SelectionAdapter() {
+        menuFavoriteAdd.setText(i18nFile.getText(I18nFile.ADD));
+        //Favorite =》 Add end
+        
+        //Favorite =》 Organize start
+        MenuItem menuFavoriteOrganize = new MenuItem(menuFavorite, SWT.NONE);
+        menuFavoriteOrganize.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 OrganizeFavoriteDialog dialog = new OrganizeFavoriteDialog(
@@ -1987,18 +2076,23 @@ public class RedisClient {
 
             }
         });
-        mntmOrganize.setText(i18nFile.getText(I18nFile.ORGANIZE));
-
+        menuFavoriteOrganize.setText(i18nFile.getText(I18nFile.ORGANIZE));
+        //Favorite =》 Organize end
+        
+        
         addFavoriteMenuItem();
+        //top menu => Favorite end
 
-        MenuItem mntmHelp = new MenuItem(menu, SWT.CASCADE);
-        mntmHelp.setText(i18nFile.getText(I18nFile.HELP));
+        //top menu => Help start
+        MenuItem menuItemHelp = new MenuItem(menu, SWT.CASCADE);
+        menuItemHelp.setText(i18nFile.getText(I18nFile.HELP));
 
-        Menu menu_2 = new Menu(mntmHelp);
-        mntmHelp.setMenu(menu_2);
+        Menu menuHelp = new Menu(menuItemHelp);
+        menuItemHelp.setMenu(menuHelp);
 
-        MenuItem mntmDonation = new MenuItem(menu_2, SWT.NONE);
-        mntmDonation.addSelectionListener(new SelectionAdapter() {
+        //Help => Donation start
+        MenuItem menuHelpDonation = new MenuItem(menuHelp, SWT.NONE);
+        menuHelpDonation.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
                 DonationDialog dialog = new DonationDialog(shell, iconImage,
@@ -2006,55 +2100,58 @@ public class RedisClient {
                 dialog.open();
             }
         });
-        mntmDonation.setText(i18nFile.getText(I18nFile.DONATION));
+        menuHelpDonation.setText(i18nFile.getText(I18nFile.DONATION));
+        //Help => Donation end
+                
+        new MenuItem(menuHelp, SWT.SEPARATOR);//分隔符
 
-        new MenuItem(menu_2, SWT.SEPARATOR);
-
-        MenuItem mntmAbout = new MenuItem(menu_2, SWT.NONE);
-        mntmAbout.addSelectionListener(new SelectionAdapter() {
+        //Help => About start
+        MenuItem menuHelpAbout = new MenuItem(menuHelp, SWT.NONE);
+        menuHelpAbout.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
                 AboutDialog dialog = new AboutDialog(shell, iconImage);
                 dialog.open();
             }
         });
-        mntmAbout.setText(i18nFile.getText(I18nFile.ABOUT));
+        menuHelpAbout.setText(i18nFile.getText(I18nFile.ABOUT));
+        //Help => About end
+        //top menu => Help end
     }
 
     private void options() {
         OptionsDialog dialog = new OptionsDialog(shell, iconImage);
         dialog.open();
-
     }
 
     private void updateOrder() {
-        mntmAscend.setSelection(false);
-        mntmDescend.setSelection(false);
+        menuViewOrderAscend.setSelection(false);
+        menuViewOrderDescend.setSelection(false);
 
         switch (clientOrder) {
             case Ascend:
-                mntmAscend.setSelection(true);
+                menuViewOrderAscend.setSelection(true);
                 break;
             case Descend:
-                mntmDescend.setSelection(true);
+                menuViewOrderDescend.setSelection(true);
                 break;
         }
     }
 
     private void updateOrderby() {
-        mntmNameOrder.setSelection(false);
-        mntmTypeOrder.setSelection(false);
-        mntmSizeOrder.setSelection(false);
+        menuViewOrderbyName.setSelection(false);
+        menuViewOrderbyType.setSelection(false);
+        menuViewOrderbySize.setSelection(false);
 
         switch (clientOrderBy) {
             case NAME:
-                mntmNameOrder.setSelection(true);
+                menuViewOrderbyName.setSelection(true);
                 break;
             case TYPE:
-                mntmTypeOrder.setSelection(true);
+                menuViewOrderbyType.setSelection(true);
                 break;
             case SIZE:
-                mntmSizeOrder.setSelection(true);
+                menuViewOrderbySize.setSelection(true);
                 break;
         }
     }

@@ -8,8 +8,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import com.cxy.redisclient.dto.ContainerKeyInfo;
 
 /**
- * This class is used for key or container cut, copy, paste operation, store the
- * cut/copy data
+ * This class is used for key or container cut, copy, paste operation, store the cut/copy data
  *
  * @author xinyu
  *
