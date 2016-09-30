@@ -401,11 +401,10 @@ public class RedisClient {
         //初始化菜单数据
         initMenuData();
 
+        menuTableDBContainer = initMenuTableDB();
         menuTreeDBContainer = initMenuTreeDB();
 
-        menuTableDBContainer = initMenuTableDB();
-
-        initMenuMulti();
+        initMenuMulti();//？？？ 不确定
 
         final Composite composite_2 = new Composite(sashForm, SWT.NONE);
         composite_2.setLayout(new GridLayout(1, false));
@@ -483,6 +482,9 @@ public class RedisClient {
 
     }
 
+   /**
+    * todo ??? 没有明白哪的菜单
+    */
     private void initMenuMulti() {
         menu_Multi = new Menu(shell);
 
@@ -528,7 +530,7 @@ public class RedisClient {
     }
 
     /**
-     * 初始化菜单数据 （Redis data explorer 右键菜单） ？？？确定是这样吗？
+     * 初始化菜单数据 （Redis data explorer 右键菜单） todo ？？？确定是这样吗？
      */
     private void initMenuData() {
         menuDataExplorer = new Menu(shell);
@@ -715,16 +717,19 @@ public class RedisClient {
     }
 
     /**
-     * 
+     * 初始化 db及其db子项 右键菜单
      * @return 
      */
     private Menu initMenuTreeDB() {
+        
         Menu tableDbMenu = initMenuTableDB();
 
-        new MenuItem(tableDbMenu, SWT.SEPARATOR);
+        
+        new MenuItem(tableDbMenu, SWT.SEPARATOR);//添加分隔符
 
-        MenuItem mntmRefresh_2 = new MenuItem(tableDbMenu, SWT.NONE);
-        mntmRefresh_2.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 => Refresh start
+        MenuItem tableDbMenuRefresh = new MenuItem(tableDbMenu, SWT.NONE);
+        tableDbMenuRefresh.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 TreeItem[] items = tree.getSelection();
@@ -732,198 +737,234 @@ public class RedisClient {
                 dbContainerTreeItemSelected(items[0], true);
             }
         });
-        mntmRefresh_2.setText(i18nFile.getText(I18nFile.REFRESH));
-
+        tableDbMenuRefresh.setText(i18nFile.getText(I18nFile.REFRESH));
+        //db及其db子项 右键菜单 => Refresh end
+        
         return tableDbMenu;
     }
 
     /**
-     * 
+     * 初始化 db及其db子项 右键菜单
      * @return 
      */
     private Menu initMenuTableDB() {
-        Menu menu_dbContainer = new Menu(shell);
+        Menu menuDbContainer = new Menu(shell);
 
-        MenuItem mntmNew_1 = new MenuItem(menu_dbContainer, SWT.CASCADE);
-        mntmNew_1.setText(i18nFile.getText(I18nFile.NEW));
+        //db及其db子项 右键菜单 New  start
+        MenuItem menuItemDbContainerNew = new MenuItem(menuDbContainer, SWT.CASCADE);
+        menuItemDbContainerNew.setText(i18nFile.getText(I18nFile.NEW));
 
-        Menu menu_1 = new Menu(mntmNew_1);
-        mntmNew_1.setMenu(menu_1);
+        Menu menuDbContainerNew = new Menu(menuItemDbContainerNew);
+        menuItemDbContainerNew.setMenu(menuDbContainerNew);
 
-        MenuItem menuItem_1 = new MenuItem(menu_1, SWT.NONE);
-        menuItem_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 New => String start
+        MenuItem menuDbContainerNewString = new MenuItem(menuDbContainerNew, SWT.NONE);
+        menuDbContainerNewString.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newString();
             }
         });
-        menuItem_1.setText(i18nFile.getText(I18nFile.STRING));
-        menuItem_1.setImage(strImage);
+        menuDbContainerNewString.setText(i18nFile.getText(I18nFile.STRING));
+        menuDbContainerNewString.setImage(strImage);
+        //db及其db子项 右键菜单 New => String end
 
-        MenuItem menuItem_2 = new MenuItem(menu_1, SWT.NONE);
-        menuItem_2.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 New => List start
+        MenuItem menuDbContainerNewList = new MenuItem(menuDbContainerNew, SWT.NONE);
+        menuDbContainerNewList.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newList();
             }
         });
-        menuItem_2.setText(i18nFile.getText(I18nFile.LIST));
-        menuItem_2.setImage(listImage);
-
-        MenuItem menuItem_3 = new MenuItem(menu_1, SWT.NONE);
-        menuItem_3.addSelectionListener(new SelectionAdapter() {
+        menuDbContainerNewList.setText(i18nFile.getText(I18nFile.LIST));
+        menuDbContainerNewList.setImage(listImage);
+        //db及其db子项 右键菜单 New => List end
+        
+        //db及其db子项 右键菜单 New => Set start
+        MenuItem menuDbContainerNewSet = new MenuItem(menuDbContainerNew, SWT.NONE);
+        menuDbContainerNewSet.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newSet();
             }
         });
-        menuItem_3.setText(i18nFile.getText(I18nFile.SET));
-        menuItem_3.setImage(setImage);
-
-        MenuItem mntmSortedSet = new MenuItem(menu_1, SWT.NONE);
-        mntmSortedSet.addSelectionListener(new SelectionAdapter() {
+        menuDbContainerNewSet.setText(i18nFile.getText(I18nFile.SET));
+        menuDbContainerNewSet.setImage(setImage);
+        //db及其db子项 右键菜单 New => Set end
+        
+        //db及其db子项 右键菜单 New => Sorted set start
+        MenuItem menuDbContainerNewSortedSet = new MenuItem(menuDbContainerNew, SWT.NONE);
+        menuDbContainerNewSortedSet.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newZSet();
             }
         });
-        mntmSortedSet.setText(i18nFile.getText(I18nFile.ZSET));
-        mntmSortedSet.setImage(zsetImage);
+        menuDbContainerNewSortedSet.setText(i18nFile.getText(I18nFile.ZSET));
+        menuDbContainerNewSortedSet.setImage(zsetImage);
+        //db及其db子项 右键菜单 New => Sorted set end
 
-        MenuItem mntmHash_1 = new MenuItem(menu_1, SWT.NONE);
-        mntmHash_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 New => Hash start
+        MenuItem menuDbContainerNewHash = new MenuItem(menuDbContainerNew, SWT.NONE);
+        menuDbContainerNewHash.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 newHash();
             }
         });
-        mntmHash_1.setText(i18nFile.getText(I18nFile.HASH));
-        mntmHash_1.setImage(hashImage);
+        menuDbContainerNewHash.setText(i18nFile.getText(I18nFile.HASH));
+        menuDbContainerNewHash.setImage(hashImage);
+        //db及其db子项 右键菜单 New => Hash end
+        //db及其db子项 右键菜单 New end
 
-        MenuItem mntmRename_1 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmRename_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Rename start
+        MenuItem menuDbContainerRename = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerRename.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 renameContainer();
             }
         });
-        mntmRename_1.setText(i18nFile.getText(I18nFile.RENAME));
+        menuDbContainerRename.setText(i18nFile.getText(I18nFile.RENAME));
+        //db及其db子项 右键菜单 Rename end
 
-        MenuItem mntmDelete_2 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmDelete_2.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Delete start
+        MenuItem menuDbContainerDelete = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerDelete.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 deleteOneContainer();
             }
         });
-        mntmDelete_2.setText(i18nFile.getText(I18nFile.DELETE));
-
-        MenuItem mntmProperties_3 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmProperties_3.addSelectionListener(new SelectionAdapter() {
+        menuDbContainerDelete.setText(i18nFile.getText(I18nFile.DELETE));
+        //db及其db子项 右键菜单 Delete end
+        
+        //db及其db子项 右键菜单 Properties start
+        MenuItem menuDbContainerProperties = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerProperties.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 dbContainerProperties();
             }
         });
-        mntmProperties_3.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        menuDbContainerProperties.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        //db及其db子项 右键菜单 Properties end
 
-        new MenuItem(menu_dbContainer, SWT.SEPARATOR);
+        new MenuItem(menuDbContainer, SWT.SEPARATOR); //添加分隔符
 
-        MenuItem mntmAddToFavorites = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmAddToFavorites.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Add to Favorites start
+        MenuItem menuDbContainerAddToFavorites = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerAddToFavorites.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 addFavorite();
             }
         });
-        mntmAddToFavorites.setText(i18nFile.getText(I18nFile.ADDFAVORITES));
+        menuDbContainerAddToFavorites.setText(i18nFile.getText(I18nFile.ADDFAVORITES));
+        //db及其db子项 右键菜单 Add to Favorites end
 
-        new MenuItem(menu_dbContainer, SWT.SEPARATOR);
+        new MenuItem(menuDbContainer, SWT.SEPARATOR);//添加分隔符
 
-        MenuItem mntmCut = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmCut.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Cut start
+        MenuItem menuDbContainerCut = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerCut.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
                 cut();
             }
         });
-        mntmCut.setText(i18nFile.getText(I18nFile.CUT));
+        menuDbContainerCut.setText(i18nFile.getText(I18nFile.CUT));
+        //db及其db子项 右键菜单 Cut end
 
-        MenuItem mntmCopy_1 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmCopy_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Copy start
+        MenuItem menuDbContainerCopy = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerCopy.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 copy();
             }
         });
-        mntmCopy_1.setText(i18nFile.getText(I18nFile.COPY));
+        menuDbContainerCopy.setText(i18nFile.getText(I18nFile.COPY));
+        //db及其db子项 右键菜单 Copy end
 
-        MenuItem mntmPaste_1 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmPaste_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Paste start
+        MenuItem menuDbContainerPaste = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerPaste.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 paste();
             }
         });
-        mntmPaste_1.setEnabled(false);
-        mntmPaste_1.setText(i18nFile.getText(I18nFile.PASTE));
+        menuDbContainerPaste.setEnabled(false);
+        menuDbContainerPaste.setText(i18nFile.getText(I18nFile.PASTE));
+        //db及其db子项 右键菜单 Paste end
 
-        new MenuItem(menu_dbContainer, SWT.SEPARATOR);
+        new MenuItem(menuDbContainer, SWT.SEPARATOR);//添加分隔符
 
-        MenuItem mntmImport_1 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmImport_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Import start
+        MenuItem menuDbContainerImport = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerImport.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 importFile();
             }
         });
-        mntmImport_1.setEnabled(false);
-        mntmImport_1.setText(i18nFile.getText(I18nFile.IMPORT));
+        menuDbContainerImport.setEnabled(false);
+        menuDbContainerImport.setText(i18nFile.getText(I18nFile.IMPORT));
+        //db及其db子项 右键菜单 Import end
 
-        MenuItem mntmExport_1 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmExport_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Export start
+        MenuItem menuDbContainerExport = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerExport.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 export();
             }
         });
-        mntmExport_1.setText(i18nFile.getText(I18nFile.EXPORT));
+        menuDbContainerExport.setText(i18nFile.getText(I18nFile.EXPORT));
+        //db及其db子项 右键菜单 Import start
 
-        new MenuItem(menu_dbContainer, SWT.SEPARATOR);
+        new MenuItem(menuDbContainer, SWT.SEPARATOR);//添加分隔符
 
-        MenuItem mntmFind_1 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmFind_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Find start
+        MenuItem menuDbContainerFind = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerFind.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 find();
             }
         });
-        mntmFind_1.setText(i18nFile.getText(I18nFile.FIND));
+        menuDbContainerFind.setText(i18nFile.getText(I18nFile.FIND));
+        //db及其db子项 右键菜单 Find start
 
-        MenuItem mntmFindNext_1 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmFindNext_1.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Find forward start
+        MenuItem menuDbContainerFindForward = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerFindForward.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 findForward();
             }
         });
-        mntmFindNext_1.setText(i18nFile.getText(I18nFile.FINDFORWARD));
+        menuDbContainerFindForward.setText(i18nFile.getText(I18nFile.FINDFORWARD));
+        //db及其db子项 右键菜单 Find forward start
 
-        MenuItem mntmFindBackward_3 = new MenuItem(menu_dbContainer, SWT.NONE);
-        mntmFindBackward_3.addSelectionListener(new SelectionAdapter() {
+        //db及其db子项 右键菜单 Find backward start
+        MenuItem menuDbContainerFindBackward = new MenuItem(menuDbContainer, SWT.NONE);
+        menuDbContainerFindBackward.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 findBackward();
             }
         });
-        mntmFindBackward_3.setText(i18nFile.getText(I18nFile.FINDBACKWARD));
+        menuDbContainerFindBackward.setText(i18nFile.getText(I18nFile.FINDBACKWARD));
+        //db及其db子项 右键菜单 Find backward start
 
-        return menu_dbContainer;
+        return menuDbContainer;
     }
 
     private void initTable(CTabFolder tabFolder) {
-        table = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION
-                | SWT.MULTI);
+        table = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI);
         mainTabItem.setControl(table);
         table.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -941,8 +982,7 @@ public class RedisClient {
                 if (selectedItem != null) {
                     NodeType type = (NodeType) selectedItem.getData(NODE_TYPE);
 
-                    if (type == NodeType.CONTAINER || type == NodeType.DATABASE
-                            || type == NodeType.SERVER) {
+                    if (type == NodeType.CONTAINER || type == NodeType.DATABASE || type == NodeType.SERVER) {
                         boolean find = false;
                         for (TreeItem treeItem : treeItems[0].getItems()) {
                             String treeText = treeItem.getText();
@@ -951,8 +991,7 @@ public class RedisClient {
                             if (treeText.equals(tableText)) {
                                 find = true;
 
-                                if (type == NodeType.CONTAINER
-                                        || type == NodeType.DATABASE) {
+                                if (type == NodeType.CONTAINER || type == NodeType.DATABASE) {
                                     dbContainerTreeItemSelected(treeItem, false);
                                 } else if (type == NodeType.SERVER) {
                                     serverTreeItemSelected(treeItem, false);
@@ -965,15 +1004,10 @@ public class RedisClient {
                             }
                         }
                         if (!find) {
-                            MessageDialog.openInformation(shell,
-                                    i18nFile.getText(I18nFile.INFORMATION),
-                                    i18nFile.getText(I18nFile.NEWKEYFOUND)
-                                    + text.getText());
+                            MessageDialog.openInformation(shell, i18nFile.getText(I18nFile.INFORMATION), i18nFile.getText(I18nFile.NEWKEYFOUND)  + text.getText());
                         }
                     } else {
-
                         dataProperties();
-
                     }
                 }
             }
@@ -986,8 +1020,7 @@ public class RedisClient {
                     if (selectedItem == null) {
                         table.setMenu(menu_null);
                     } else {
-                        NodeType type = (NodeType) selectedItem
-                                .getData(NODE_TYPE);
+                        NodeType type = (NodeType) selectedItem.getData(NODE_TYPE);
 
                         if (null != type) {
                             switch (type) {
@@ -1001,8 +1034,7 @@ public class RedisClient {
                                 case CONTAINER: {
                                     TableItem[] items = table.getSelection();
                                     if (items.length == 1) {
-                                        updateMenuDBContainer(type,
-                                                menuTableDBContainer);
+                                        updateMenuDBContainer(type, menuTableDBContainer);
                                         table.setMenu(menuTableDBContainer);
                                     } else {
                                         table.setMenu(menu_Multi);
@@ -1063,6 +1095,11 @@ public class RedisClient {
         });
     }
 
+    /**
+     * 更新Server菜单
+     * @param isTable
+     * @param menu 
+     */
     protected void updateMenuServer(boolean isTable, Menu menu) {
         if (isTable && table.getSelectionCount() > 1) {
             menu.getItem(0).setEnabled(false);
@@ -1081,6 +1118,9 @@ public class RedisClient {
         }
     }
 
+    /**
+     * 
+     */
     protected void dbContainerProperties() {
         TreeItem treeItem;
 
@@ -1114,18 +1154,15 @@ public class RedisClient {
             container = cinfo.getContainerStr();
         }
 
-        Set<Node> nodes = nodeService.listContainerAllKeys(cinfo.getId(),
-                cinfo.getDb(), container);
+        Set<Node> nodes = nodeService.listContainerAllKeys(cinfo.getId(), cinfo.getDb(), container);
         str += nodes.size();
 
         String properties;
 
         if (type == NodeType.DATABASE) {
-            properties = getLocation(cinfo) + " "
-                    + i18nFile.getText(I18nFile.DBPROPERTIES);
+            properties = getLocation(cinfo) + " " + i18nFile.getText(I18nFile.DBPROPERTIES);
         } else {
-            properties = getLocation(cinfo) + " "
-                    + i18nFile.getText(I18nFile.CONTAINERPROPERTIES);
+            properties = getLocation(cinfo) + " " + i18nFile.getText(I18nFile.CONTAINERPROPERTIES);
         }
         MessageDialog.openInformation(shell, properties, str);
 
@@ -1498,6 +1535,9 @@ public class RedisClient {
         mntmRefresh.setText(i18nFile.getText(I18nFile.REFRESH));
     }
 
+    /**
+     * 初始化 top menu 
+     */
     private void initMenu() {
         //top menu 
         menu = new Menu(shell, SWT.BAR);
@@ -1811,8 +1851,7 @@ public class RedisClient {
                 findBackward();
             }
         });
-        menuDataFindBackward.setText(i18nFile.getText(I18nFile.FINDBACKWARD)
-                + "\tCtrl+F3");
+        menuDataFindBackward.setText(i18nFile.getText(I18nFile.FINDBACKWARD) + "\tCtrl+F3");
         menuDataFindBackward.setAccelerator(SWT.CTRL + SWT.F3);
         //Data =》 Find backward end
         //top menu => Data end
@@ -2089,8 +2128,7 @@ public class RedisClient {
         menuFavoriteOrganize.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                OrganizeFavoriteDialog dialog = new OrganizeFavoriteDialog(
-                        shell, iconImage);
+                OrganizeFavoriteDialog dialog = new OrganizeFavoriteDialog(shell, iconImage);
 
                 @SuppressWarnings("unchecked")
                 List<Favorite> favorites = (List<Favorite>) dialog.open();
@@ -2122,8 +2160,7 @@ public class RedisClient {
         menuHelpDonation.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
-                DonationDialog dialog = new DonationDialog(shell, iconImage,
-                        codeImage);
+                DonationDialog dialog = new DonationDialog(shell, iconImage, codeImage);
                 dialog.open();
             }
         });
@@ -2187,41 +2224,28 @@ public class RedisClient {
         if (fBuffer == null) {
             find();
         } else {
-            Node node = nodeService.findNext(fBuffer.getFindNode(),
-                    fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(),
-                    fBuffer.getContainer(), fBuffer.getSearchNodeType(),
-                    fBuffer.getPattern(), true);
+            Node node = nodeService.findNext(fBuffer.getFindNode(), fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(), fBuffer.getContainer(), fBuffer.getSearchNodeType(), fBuffer.getPattern(), true);
             if (node != null) {
-                TreeItem selected = gotoDBContainer(node.getId(), node.getDb(),
-                        node.getKey(), true, true);
+                TreeItem selected = gotoDBContainer(node.getId(), node.getDb(), node.getKey(), true, true);
                 history.add(selected);
                 btnBackward.setEnabled(true);
                 btnForward.setEnabled(false);
 
                 fBuffer.setFindNode(node);
             } else {
-                boolean ok = MessageDialog.openConfirm(shell,
-                        i18nFile.getText(I18nFile.FINDFORWARD),
-                        i18nFile.getText(I18nFile.FINDAGAIN));
+                boolean ok = MessageDialog.openConfirm(shell, i18nFile.getText(I18nFile.FINDFORWARD), i18nFile.getText(I18nFile.FINDAGAIN));
                 if (ok) {
-                    Set<Node> nodes = nodeService.find(fBuffer.getSearchFrom(),
-                            fBuffer.getId(), fBuffer.getDb(),
-                            fBuffer.getContainer(),
-                            fBuffer.getSearchNodeType(), fBuffer.getPattern(),
-                            true);
+                    Set<Node> nodes = nodeService.find(fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(), fBuffer.getContainer(),  fBuffer.getSearchNodeType(), fBuffer.getPattern(), true);
                     if (!nodes.isEmpty()) {
                         Node node1 = nodes.iterator().next();
-                        TreeItem selected = gotoDBContainer(node1.getId(),
-                                node1.getDb(), node1.getKey(), true, true);
+                        TreeItem selected = gotoDBContainer(node1.getId(), node1.getDb(), node1.getKey(), true, true);
                         history.add(selected);
                         btnBackward.setEnabled(true);
                         btnForward.setEnabled(false);
 
                         fBuffer.setFindNode(node1);
                     } else {
-                        MessageDialog.openInformation(shell,
-                                i18nFile.getText(I18nFile.FINDRESULTS),
-                                i18nFile.getText(I18nFile.NOFOUND));
+                        MessageDialog.openInformation(shell, i18nFile.getText(I18nFile.FINDRESULTS), i18nFile.getText(I18nFile.NOFOUND));
                     }
                 }
             }
@@ -2232,13 +2256,9 @@ public class RedisClient {
         if (fBuffer == null) {
             find();
         } else {
-            Node node = nodeService.findNext(fBuffer.getFindNode(),
-                    fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(),
-                    fBuffer.getContainer(), fBuffer.getSearchNodeType(),
-                    fBuffer.getPattern(), false);
+            Node node = nodeService.findNext(fBuffer.getFindNode(), fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(), fBuffer.getContainer(), fBuffer.getSearchNodeType(), fBuffer.getPattern(), false);
             if (node != null) {
-                TreeItem selected = gotoDBContainer(node.getId(), node.getDb(),
-                        node.getKey(), true, true);
+                TreeItem selected = gotoDBContainer(node.getId(), node.getDb(), node.getKey(), true, true);
 
                 history.add(selected);
                 btnBackward.setEnabled(true);
@@ -2246,19 +2266,12 @@ public class RedisClient {
 
                 fBuffer.setFindNode(node);
             } else {
-                boolean ok = MessageDialog.openConfirm(shell,
-                        i18nFile.getText(I18nFile.FINDBACKWARD),
-                        i18nFile.getText(I18nFile.FINDAGAIN));
+                boolean ok = MessageDialog.openConfirm(shell, i18nFile.getText(I18nFile.FINDBACKWARD), i18nFile.getText(I18nFile.FINDAGAIN));
                 if (ok) {
-                    Set<Node> nodes = nodeService.find(fBuffer.getSearchFrom(),
-                            fBuffer.getId(), fBuffer.getDb(),
-                            fBuffer.getContainer(),
-                            fBuffer.getSearchNodeType(), fBuffer.getPattern(),
-                            false);
+                    Set<Node> nodes = nodeService.find(fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(), fBuffer.getContainer(), fBuffer.getSearchNodeType(), fBuffer.getPattern(), false);
                     if (!nodes.isEmpty()) {
                         Node node1 = nodes.iterator().next();
-                        TreeItem selected = gotoDBContainer(node1.getId(),
-                                node1.getDb(), node1.getKey(), true, true);
+                        TreeItem selected = gotoDBContainer(node1.getId(), node1.getDb(), node1.getKey(), true, true);
 
                         history.add(selected);
                         btnBackward.setEnabled(true);
@@ -2266,9 +2279,7 @@ public class RedisClient {
 
                         fBuffer.setFindNode(node1);
                     } else {
-                        MessageDialog.openInformation(shell,
-                                i18nFile.getText(I18nFile.FINDRESULTS),
-                                i18nFile.getText(I18nFile.NOFOUND));
+                        MessageDialog.openInformation(shell, i18nFile.getText(I18nFile.FINDRESULTS), i18nFile.getText(I18nFile.NOFOUND));
                     }
                 }
             }
@@ -2291,25 +2302,17 @@ public class RedisClient {
             parseContainer(treeItem, cinfo);
             NodeType searchFrom = (NodeType) treeItem.getData(NODE_TYPE);
 
-            Set<Node> nodes = nodeService.find(searchFrom, cinfo.getId(),
-                    cinfo.getDb(), cinfo.getContainerStr(),
-                    info.getSearchNodeType(), info.getPattern(),
-                    info.isForward());
+            Set<Node> nodes = nodeService.find(searchFrom, cinfo.getId(), cinfo.getDb(), cinfo.getContainerStr(), info.getSearchNodeType(), info.getPattern(), info.isForward());
             if (!nodes.isEmpty()) {
                 Node node = nodes.iterator().next();
-                TreeItem selected = gotoDBContainer(node.getId(), node.getDb(),
-                        node.getKey(), true, true);
+                TreeItem selected = gotoDBContainer(node.getId(), node.getDb(), node.getKey(), true, true);
                 history.add(selected);
                 btnBackward.setEnabled(true);
                 btnForward.setEnabled(false);
 
-                fBuffer = new FindBuffer(node, searchFrom, cinfo.getId(),
-                        cinfo.getDb(), cinfo.getContainerStr(),
-                        info.getSearchNodeType(), info.getPattern());
+                fBuffer = new FindBuffer(node, searchFrom, cinfo.getId(), cinfo.getDb(), cinfo.getContainerStr(), info.getSearchNodeType(), info.getPattern());
             } else {
-                MessageDialog.openInformation(shell,
-                        i18nFile.getText(I18nFile.FINDRESULTS),
-                        i18nFile.getText(I18nFile.NOFOUND));
+                MessageDialog.openInformation(shell, i18nFile.getText(I18nFile.FINDRESULTS), i18nFile.getText(I18nFile.NOFOUND));
             }
         }
     }
@@ -2326,9 +2329,7 @@ public class RedisClient {
             boolean ok = false;
             boolean exist = exportFile.exists();
             if (exist) {
-                ok = MessageDialog.openConfirm(shell,
-                        i18nFile.getText(I18nFile.FILEEXIST),
-                        i18nFile.getText(I18nFile.FILEREPLACE));
+                ok = MessageDialog.openConfirm(shell, i18nFile.getText(I18nFile.FILEEXIST), i18nFile.getText(I18nFile.FILEREPLACE));
             }
             if (!exist || ok) {
                 for (Item item : itemsSelected) {
@@ -2355,14 +2356,12 @@ public class RedisClient {
         if (item instanceof TableItem) {
             NodeType type = (NodeType) item.getData(NODE_TYPE);
             if (type != NodeType.CONTAINER && type != NodeType.DATABASE) {
-                String con = containerKey == null ? "" : containerKey
-                        .getContainerKey();
+                String con = containerKey == null ? "" : containerKey.getContainerKey();
                 containerKey = new ContainerKey(con + item.getText());
             }
         }
 
-        ExportService service = new ExportService(file, cinfo.getId(),
-                cinfo.getDb(), containerKey);
+        ExportService service = new ExportService(file, cinfo.getId(), cinfo.getDb(), containerKey);
         try {
             service.export();
         } catch (IOException e) {
@@ -2388,8 +2387,7 @@ public class RedisClient {
         dialog.setFilterExtensions(filterExt);
         String file = dialog.open();
         if (file != null) {
-            ImportService service = new ImportService(file, cinfo.getId(),
-                    cinfo.getDb());
+            ImportService service = new ImportService(file, cinfo.getId(), cinfo.getDb());
             try {
                 service.importFile();
             } catch (IOException e) {
@@ -2408,7 +2406,6 @@ public class RedisClient {
                 items[i].dispose();
             }
         }
-
     }
 
     private void addFavoriteMenuItem() {
@@ -2422,8 +2419,7 @@ public class RedisClient {
                 menuItem.addSelectionListener(new SelectionAdapter() {
                     @Override
                     public void widgetSelected(SelectionEvent e) {
-                        Favorite favorite = (Favorite) menuItem
-                                .getData(FAVORITE);
+                        Favorite favorite = (Favorite) menuItem.getData(FAVORITE);
                         int sid = favorite.getServerID();
 
                         String[] containers = favorite.getFavorite().split(":");
@@ -2432,10 +2428,7 @@ public class RedisClient {
                         for (int i = 2; i < containers.length; i++) {
                             container += containers[i] + ":";
                         }
-                        TreeItem selected = gotoDBContainer(sid, Integer
-                                .parseInt(containers[1].replaceFirst(DB_PREFIX,
-                                        "")), container, favorite.isData(),
-                                false);
+                        TreeItem selected = gotoDBContainer(sid, Integer.parseInt(containers[1].replaceFirst(DB_PREFIX, "")), container, favorite.isData(), false);
                         history.add(selected);
                         btnBackward.setEnabled(true);
                         btnForward.setEnabled(false);
@@ -2470,8 +2463,7 @@ public class RedisClient {
         Server server = (Server) dialog.open();
 
         if (server != null) {
-            server.setId(serverService.add(server.getName(), server.getHost(),
-                    server.getPort(), server.getPassword()));
+            server.setId(serverService.add(server.getName(), server.getHost(), server.getPort(), server.getPassword()));
             TreeItem item = addServerTreeItem(server);
             serverTreeItemSelected(item, false);
             history.add(item);
@@ -2485,12 +2477,10 @@ public class RedisClient {
         int id = (Integer) itemsSelected[0].getData(NODE_ID);
 
         Server server = serverService.listById(id);
-        UpdateServerDialog dialog = new UpdateServerDialog(shell, iconImage,
-                server);
+        UpdateServerDialog dialog = new UpdateServerDialog(shell, iconImage, server);
         server = (Server) dialog.open();
         if (server != null) {
-            serverService.update(id, server.getName(), server.getHost(),
-                    server.getPort(), server.getPassword());
+            serverService.update(id, server.getName(), server.getHost(), server.getPort(), server.getPassword());
             TreeItem treeItem;
             if (itemsSelected[0] instanceof TableItem) {
                 treeItem = getTreeItemByTableItem((TableItem) itemsSelected[0]);
@@ -2506,16 +2496,12 @@ public class RedisClient {
 
     private void removeServer() {
         if (itemsSelected.length == 1) {
-            boolean ok = MessageDialog.openConfirm(shell,
-                    i18nFile.getText(I18nFile.REMOVESERVER),
-                    i18nFile.getText(I18nFile.CONFIRMREMOVESERVER));
+            boolean ok = MessageDialog.openConfirm(shell, i18nFile.getText(I18nFile.REMOVESERVER), i18nFile.getText(I18nFile.CONFIRMREMOVESERVER));
             if (ok) {
                 removeOneServer(itemsSelected[0]);
             }
         } else if (itemsSelected.length > 1) {
-            boolean ok = MessageDialog.openConfirm(shell,
-                    i18nFile.getText(I18nFile.REMOVESERVER),
-                    i18nFile.getText(I18nFile.CONFIRMREMOVESERVER));
+            boolean ok = MessageDialog.openConfirm(shell, i18nFile.getText(I18nFile.REMOVESERVER), i18nFile.getText(I18nFile.CONFIRMREMOVESERVER));
             if (ok) {
                 for (Item item : itemsSelected) {
                     removeOneServer(item);
@@ -2538,9 +2524,7 @@ public class RedisClient {
         TreeItem treeItem = treeItems[0];
         NodeType tableItmeType = (NodeType) tableItem.getData(NODE_TYPE);
 
-        if (tableItmeType != NodeType.DATABASE
-                && tableItmeType != NodeType.SERVER
-                && tableItmeType != NodeType.CONTAINER) {
+        if (tableItmeType != NodeType.DATABASE && tableItmeType != NodeType.SERVER && tableItmeType != NodeType.CONTAINER) {
             return treeItem;
         }
         TreeItem[] subTreeItems = treeItem.getItems();
@@ -2580,10 +2564,7 @@ public class RedisClient {
         RenameInfo rinfo = (RenameInfo) dialog.open();
 
         if (rinfo != null) {
-            Set<String> result = nodeService.renameContainer(cinfo.getId(),
-                    cinfo.getDb(), cinfo.getContainerStr(),
-                    rinfo.getNewContainer(), rinfo.isOverwritten(),
-                    rinfo.isRenameSub());
+            Set<String> result = nodeService.renameContainer(cinfo.getId(), cinfo.getDb(), cinfo.getContainerStr(),  rinfo.getNewContainer(), rinfo.isOverwritten(), rinfo.isRenameSub());
             treeItem.getParentItem().setData(ITEM_OPENED, false);
             dbContainerTreeItemSelected(treeItem.getParentItem(), false);
             if (!rinfo.isOverwritten() && result.size() > 0) {
@@ -2591,8 +2572,7 @@ public class RedisClient {
                 for (String container : result) {
                     failString += container + "\n";
                 }
-                MessageDialog.openError(shell,
-                        i18nFile.getText(I18nFile.RENAMERESULT), failString);
+                MessageDialog.openError(shell, i18nFile.getText(I18nFile.RENAMERESULT), failString);
             }
         }
     }
@@ -2609,8 +2589,7 @@ public class RedisClient {
 
         parseContainer(treeItem, cinfo);
 
-        nodeService.deleteContainer(cinfo.getId(), cinfo.getDb(),
-                cinfo.getContainerStr(), deleteSub);
+        nodeService.deleteContainer(cinfo.getId(), cinfo.getDb(), cinfo.getContainerStr(), deleteSub);
 
         if (item instanceof TableItem) {
             treeItem.dispose();
@@ -2630,8 +2609,7 @@ public class RedisClient {
             treeItem = getTreeItemByTableItem((TableItem) itemsSelected[0]);
             NodeType type = (NodeType) itemsSelected[0].getData(NODE_TYPE);
             if (type == NodeType.CONTAINER || type == NodeType.DATABASE) {
-                fullContainer = text.getText() + itemsSelected[0].getText()
-                        + ":";
+                fullContainer = text.getText() + itemsSelected[0].getText() + ":";
             } else {
                 fullContainer = text.getText() + itemsSelected[0].getText();
             }
@@ -2639,8 +2617,7 @@ public class RedisClient {
 
         parseContainer(treeItem, cinfo);
 
-        AddFavoriteDialog dialog = new AddFavoriteDialog(shell, iconImage,
-                fullContainer);
+        AddFavoriteDialog dialog = new AddFavoriteDialog(shell, iconImage, fullContainer);
         String name = (String) dialog.open();
         if (name != null) {
             favoriteService.add(cinfo.getId(), name, fullContainer);
@@ -2674,8 +2651,7 @@ public class RedisClient {
         }
     }
 
-    private void dbContainerTreeItemSelected(TreeItem itemSelected,
-            boolean refresh) {
+    private void dbContainerTreeItemSelected(TreeItem itemSelected, boolean refresh) {
         itemsSelected = new Item[]{itemSelected};
         tree.setSelection(itemSelected);
         ContainerKeyInfo info = new ContainerKeyInfo();
@@ -2727,8 +2703,7 @@ public class RedisClient {
     }
 
     private String getLocation(ContainerKeyInfo info) {
-        return info.getServerName() + ":" + DB_PREFIX + info.getDb() + ":"
-                + info.getContainerStr();
+        return info.getServerName() + ":" + DB_PREFIX + info.getDb() + ":" + info.getContainerStr();
     }
 
     private boolean findItemByNode(TreeItem itemSelected, Node node) {
@@ -2744,10 +2719,7 @@ public class RedisClient {
     }
 
     private boolean findNodeByItem(Set<Node> nodes, TreeItem item) {
-        if (nodes.stream().anyMatch((node) -> (node.getKey().equals(item.getText())))) {
-            return true;
-        }
-        return false;
+        return nodes.stream().anyMatch((node) -> (node.getKey().equals(item.getText())));
     }
 
     /**
@@ -3013,20 +2985,15 @@ public class RedisClient {
 
         parseContainer(treeItem, cinfo);
 
-        NewStringDialog dialog = new NewStringDialog(shell, iconImage,
-                cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
-                cinfo.getContainerStr());
+        NewStringDialog dialog = new NewStringDialog(shell, iconImage, cinfo.getId(), cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
         StringInfo info = (StringInfo) dialog.open();
         if (info != null) {
-            nodeService.addString(cinfo.getId(), cinfo.getDb(), info.getKey(),
-                    info.getValue(), info.getTtl());
+            nodeService.addString(cinfo.getId(), cinfo.getDb(), info.getKey(), info.getValue(), info.getTtl());
 
             treeItem.setData(ITEM_OPENED, false);
             dbContainerTreeItemSelected(treeItem, false);
-            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
-                    false);
+            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true, false);
         }
-
     }
 
     private void newList() {
@@ -3041,18 +3008,13 @@ public class RedisClient {
 
         parseContainer(treeItem, cinfo);
 
-        NewListDialog dialog = new NewListDialog(shell, iconImage,
-                cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
-                cinfo.getContainerStr());
+        NewListDialog dialog = new NewListDialog(shell, iconImage, cinfo.getId(), cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
         ListInfo info = (ListInfo) dialog.open();
         if (info != null) {
-            listService.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
-                    info.getValues(), info.isHeadTail(), info.isExist(),
-                    info.getTtl());
+            listService.add(cinfo.getId(), cinfo.getDb(), info.getKey(), info.getValues(), info.isHeadTail(), info.isExist(), info.getTtl());
             treeItem.setData(ITEM_OPENED, false);
             dbContainerTreeItemSelected(treeItem, false);
-            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
-                    false);
+            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true, false);
         }
     }
 
@@ -3068,16 +3030,13 @@ public class RedisClient {
 
         parseContainer(treeItem, cinfo);
 
-        NewSetDialog dialog = new NewSetDialog(shell, iconImage, cinfo.getId(),
-                cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
+        NewSetDialog dialog = new NewSetDialog(shell, iconImage, cinfo.getId(), cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
         SetInfo info = (SetInfo) dialog.open();
         if (info != null) {
-            setService.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
-                    info.getValues(), info.getTtl());
+            setService.add(cinfo.getId(), cinfo.getDb(), info.getKey(), info.getValues(), info.getTtl());
             treeItem.setData(ITEM_OPENED, false);
             dbContainerTreeItemSelected(treeItem, false);
-            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
-                    false);
+            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true, false);
         }
     }
 
@@ -3093,19 +3052,14 @@ public class RedisClient {
 
         parseContainer(treeItem, cinfo);
 
-        NewZSetDialog dialog = new NewZSetDialog(shell, iconImage,
-                cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
-                cinfo.getContainerStr());
+        NewZSetDialog dialog = new NewZSetDialog(shell, iconImage, cinfo.getId(), cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
         ZSetInfo info = (ZSetInfo) dialog.open();
         if (info != null) {
-            zsetService.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
-                    info.getValues(), info.getTtl());
+            zsetService.add(cinfo.getId(), cinfo.getDb(), info.getKey(), info.getValues(), info.getTtl());
             treeItem.setData(ITEM_OPENED, false);
             dbContainerTreeItemSelected(treeItem, false);
-            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
-                    false);
+            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true, false);
         }
-
     }
 
     private void newHash() {
@@ -3120,19 +3074,14 @@ public class RedisClient {
 
         parseContainer(treeItem, cinfo);
 
-        NewHashDialog dialog = new NewHashDialog(shell, iconImage,
-                cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
-                cinfo.getContainerStr());
+        NewHashDialog dialog = new NewHashDialog(shell, iconImage, cinfo.getId(), cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
         HashInfo info = (HashInfo) dialog.open();
         if (info != null) {
-            hashService.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
-                    info.getValues(), info.getTtl());
+            hashService.add(cinfo.getId(), cinfo.getDb(), info.getKey(), info.getValues(), info.getTtl());
             treeItem.setData(ITEM_OPENED, false);
             dbContainerTreeItemSelected(treeItem, false);
-            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
-                    false);
+            gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true, false);
         }
-
     }
 
     private void columnSelected() {
@@ -3178,8 +3127,7 @@ public class RedisClient {
         String key = cinfo.getContainerStr();
         key += itemsSelected[0].getText();
 
-        RenameKeysDialog dialog = new RenameKeysDialog(shell, iconImage,
-                cinfo.getServerName(), cinfo.getDb(), key);
+        RenameKeysDialog dialog = new RenameKeysDialog(shell, iconImage, cinfo.getServerName(), cinfo.getDb(), key);
         RenameInfo rinfo = (RenameInfo) dialog.open();
 
         if (rinfo != null) {
@@ -3189,8 +3137,7 @@ public class RedisClient {
 
             if (!rinfo.isOverwritten() && !result) {
                 String failString = i18nFile.getText(I18nFile.RENAMEKEYFAIL);
-                MessageDialog.openError(shell,
-                        i18nFile.getText(I18nFile.RENAMEKEYRESULT), failString);
+                MessageDialog.openError(shell, i18nFile.getText(I18nFile.RENAMEKEYRESULT), failString);
             }
         }
     }
@@ -3289,26 +3236,15 @@ public class RedisClient {
         }
 
         if (source.getContainer() != null && source.getContainer().isKey()) {
-            String newKey = nodeService.pasteKey(source.getId(), source.getDb(),
-                    source.getContainerStr(), target.getId(), target.getDb(),
-                    target.getContainerStr()
-                    + source.getContainer().getKeyOnly(),
-                    pBuffer.isCopy(), true);
+            String newKey = nodeService.pasteKey(source.getId(), source.getDb(), source.getContainerStr(), target.getId(), target.getDb(), target.getContainerStr() + source.getContainer().getKeyOnly(), pBuffer.isCopy(), true);
             if (newKey == null) {
-                gotoDBContainer(target.getId(), target.getDb(),
-                        target.getContainerStr()
-                        + source.getContainer().getKeyOnly(), true,
-                        true);
+                gotoDBContainer(target.getId(), target.getDb(), target.getContainerStr() + source.getContainer().getKeyOnly(), true, true);
             } else {
-                gotoDBContainer(target.getId(), target.getDb(), newKey, true,
-                        true);
+                gotoDBContainer(target.getId(), target.getDb(), newKey, true, true);
             }
         } else {
-            nodeService.pasteContainer(source.getId(), source.getDb(),
-                    source.getContainerStr(), target.getId(), target.getDb(),
-                    target.getContainerStr(), pBuffer.isCopy(), true);
-            gotoDBContainer(target.getId(), target.getDb(),
-                    target.getContainerStr(), false, true);
+            nodeService.pasteContainer(source.getId(), source.getDb(), source.getContainerStr(), target.getId(), target.getDb(), target.getContainerStr(), pBuffer.isCopy(), true);
+            gotoDBContainer(target.getId(), target.getDb(), target.getContainerStr(), false, true);
         }
     }
 
@@ -3340,8 +3276,7 @@ public class RedisClient {
         }
     }
 
-    private TreeItem gotoDBContainer(int id, int db, String container,
-            boolean isKey, boolean refresh) {
+    private TreeItem gotoDBContainer(int id, int db, String container, boolean isKey, boolean refresh) {
         rootTreeItemSelected(false);
         TreeItem dbItem = findDBTreeItem(id, db);
         TreeItem dataItemSelected = dbItem;
@@ -3468,8 +3403,7 @@ public class RedisClient {
             history.add(items[0]);
             btnBackward.setEnabled(true);
             btnForward.setEnabled(false);
-        } else if (itemsSelected[0] instanceof TableItem
-                && items[0] != treeItemSelected) {
+        } else if (itemsSelected[0] instanceof TableItem && items[0] != treeItemSelected) {
             history.add(items[0]);
             btnBackward.setEnabled(true);
             btnForward.setEnabled(false);
@@ -3483,20 +3417,17 @@ public class RedisClient {
 
         Map<String, String[]> values = serverService.listInfo(id);
 
-        PropertiesDialog dialog = new PropertiesDialog(shell, iconImage, info,
-                values);
+        PropertiesDialog dialog = new PropertiesDialog(shell, iconImage, info, values);
         dialog.open();
     }
 
     private void deleteOneContainer() {
-        DeleteContainerDialog dialog = new DeleteContainerDialog(shell,
-                iconImage, questionImage, 1);
+        DeleteContainerDialog dialog = new DeleteContainerDialog(shell, iconImage, questionImage, 1);
         Boolean deleteSub = (Boolean) dialog.open();
         if (deleteSub != null) {
             TreeItem treeItem;
             if (itemsSelected[0] instanceof TableItem) {
-                treeItem = getTreeItemByTableItem((TableItem) itemsSelected[0])
-                        .getParentItem();
+                treeItem = getTreeItemByTableItem((TableItem) itemsSelected[0]).getParentItem();
             } else {
                 treeItem = ((TreeItem) itemsSelected[0]).getParentItem();
             }
@@ -3509,9 +3440,7 @@ public class RedisClient {
     }
 
     private void deleteOneKey() {
-        boolean ok = MessageDialog.openConfirm(shell,
-                i18nFile.getText(I18nFile.DELETEKEY),
-                i18nFile.getText(I18nFile.CONFIRMDELETEKEY));
+        boolean ok = MessageDialog.openConfirm(shell, i18nFile.getText(I18nFile.DELETEKEY), i18nFile.getText(I18nFile.CONFIRMDELETEKEY));
         if (ok) {
             deleteKey(itemsSelected[0]);
         }
@@ -3520,14 +3449,12 @@ public class RedisClient {
     private void deleteKeys() {
         TableItem containerItem = findContainerTableItem();
 
-        DeleteContainerDialog dialog = new DeleteContainerDialog(shell,
-                iconImage, questionImage, containerItem == null ? 0 : -1);
+        DeleteContainerDialog dialog = new DeleteContainerDialog(shell, iconImage, questionImage, containerItem == null ? 0 : -1);
         Boolean deleteSub = (Boolean) dialog.open();
         if (deleteSub != null) {
             TreeItem treeItem = null;
             if (containerItem != null) {
-                treeItem = getTreeItemByTableItem(containerItem)
-                        .getParentItem();
+                treeItem = getTreeItemByTableItem(containerItem).getParentItem();
             }
 
             for (Item item : itemsSelected) {
@@ -3559,12 +3486,10 @@ public class RedisClient {
     private void refreshDB() {
         TreeItem[] serverItems = rootRedisServers.getItems();
         for (TreeItem item : serverItems) {
-            if (item.getData(ITEM_OPENED) != null
-                    && ((Boolean) (item.getData(ITEM_OPENED)) == true)) {
+            if (item.getData(ITEM_OPENED) != null && ((Boolean) (item.getData(ITEM_OPENED)) == true)) {
                 TreeItem[] dbItems = item.getItems();
                 for (TreeItem dbItem : dbItems) {
-                    if (dbItem.getData(ITEM_OPENED) != null
-                            && ((Boolean) (dbItem.getData(ITEM_OPENED)) == true)) {
+                    if (dbItem.getData(ITEM_OPENED) != null && ((Boolean) (dbItem.getData(ITEM_OPENED)) == true)) {
                         dbItem.setData(ITEM_OPENED, false);
                     }
                     dbItem.removeAll();
@@ -3625,8 +3550,7 @@ public class RedisClient {
     private void updateView(ContainerKeyInfo cinfo) {
         refreshDB();
         if (cinfo.getId() != -1 && cinfo.getDb() != -1) {
-            TreeItem item = gotoDBContainer(cinfo.getId(), cinfo.getDb(),
-                    cinfo.getContainerStr(), false, false);
+            TreeItem item = gotoDBContainer(cinfo.getId(), cinfo.getDb(), cinfo.getContainerStr(), false, false);
             history.add(item);
             btnBackward.setEnabled(true);
         }
