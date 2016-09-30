@@ -19,6 +19,10 @@ import com.cxy.redisclient.integration.I18nFile;
 import com.cxy.redisclient.presentation.RedisClient;
 import com.cxy.redisclient.service.NodeService;
 
+/**
+ * 
+ * @author Administrator
+ */
 public abstract class DataContent extends NewDataContent {
 
     private final CTabItem tabItem;
@@ -149,6 +153,16 @@ public abstract class DataContent extends NewDataContent {
         setTTL((int) service.getTTL(id, db, key));
     }
 
+    /**
+     * 
+     * @param tabItem
+     * @param image
+     * @param id
+     * @param server
+     * @param db
+     * @param key
+     * @param dataTitle 
+     */
     public DataContent(CTabItem tabItem, Image image, int id, String server, int db, String key, String dataTitle) {
         super(id, server, db, key, dataTitle);
         this.tabItem = tabItem;
@@ -156,6 +170,10 @@ public abstract class DataContent extends NewDataContent {
         this.image = image;
     }
 
+    /**
+     * 
+     * @param ttl 
+     */
     public void setTTL(int ttl) {
         if (ttl == -1) {
             btnExpire.setSelection(false);
@@ -169,22 +187,38 @@ public abstract class DataContent extends NewDataContent {
         }
     }
 
+    /**
+     * 
+     * @return 
+     */
     public Button getTTLBtnApplyButton() {
         return btnApply;
     }
 
     public abstract Button getApplyButtion();
 
+    /**
+     * 
+     * @param apply 
+     */
     public void setApply(boolean apply) {
         getApplyButtion().setEnabled(apply);
         tabItem.setShowClose(!apply);
     }
 
+    /**
+     * 
+     * @param apply 
+     */
     public void setTTLApply(boolean apply) {
         getTTLBtnApplyButton().setEnabled(apply);
         tabItem.setShowClose(!apply);
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean canClose() {
         boolean apply = getApplyButtion() == null ? false : getApplyButtion().isEnabled();
         boolean ttlApply = getTTLBtnApplyButton().isEnabled();

@@ -131,19 +131,20 @@ public class RedisClient {
     private Menu menu_null;
     private Menu menuTreeDBContainer;
     private Menu menuTableDBContainer;
-    private Menu menu_key;
+    private Menu menuDataExplorer;
     private Menu menu_Multi;
-    private Menu menuData;
-    private Menu menuFavorite;
-    private Menu menuServer;
-    private Menu menuView;
-    private Menu menuTool;
+    private Menu menuData; //顶级 Data菜单
+    private Menu menuFavorite; //顶级 Favorite菜单
+    private Menu menuServer; //顶级 Server菜单
+    private Menu menuView; //顶级 View菜单
+    private Menu menuTools; //顶级 Tools菜单
 
-    private MenuItem menuViewOrderbyName;
-    private MenuItem menuViewOrderbyType;
-    private MenuItem menuViewOrderbySize;
-    private MenuItem menuViewOrderAscend;
-    private MenuItem menuViewOrderDescend;
+    //顶级View菜单 子菜单 
+    private MenuItem menuViewOrderbyName;  // View => Order by => Name 菜单
+    private MenuItem menuViewOrderbyType;  // View => Order by => Type 菜单
+    private MenuItem menuViewOrderbySize;  // View => Order by => Size 菜单
+    private MenuItem menuViewOrderAscend;  // View => Order => Ascend 菜单
+    private MenuItem menuViewOrderDescend; // View => Order => Descend 菜单
 
     private final ServerService serverService = new ServerService();
     private final NodeService nodeService = new NodeService();
@@ -177,15 +178,13 @@ public class RedisClient {
     private TableColumn tableColumnName;
     private TableColumn tablecolumnType;
     private TableColumn tablecolumnSize;
-    private Button btnBackward;
-    private Button btnForward;
+    private Button btnBackward; //上一个按钮  ←按钮
+    private Button btnForward; //下一个按钮   →按钮
 
     private Order clientOrder = Order.Ascend;
     private OrderBy clientOrderBy = OrderBy.NAME;
 
     /**
-     * Launch the application.
-     *
      * @param args
      */
     public static void main(String[] args) {
@@ -210,9 +209,7 @@ public class RedisClient {
                     display.sleep();
                 }
             } catch (Exception e) {
-                MessageDialog.openError(shell,
-                        i18nFile.getText(I18nFile.ERROR),
-                        e.getLocalizedMessage());
+                MessageDialog.openError(shell, i18nFile.getText(I18nFile.ERROR), e.getLocalizedMessage());
                 e.printStackTrace();
             }
         }
@@ -233,54 +230,45 @@ public class RedisClient {
         initSash();
     }
 
+    /**
+     * 初始化图片
+     */
     private void initImage() {
-        redisImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/redis.png"));
-        dbImage = new Image(shell.getDisplay(), getClass().getResourceAsStream(
-                "/db.png"));
+        redisImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/redis.png"));
+        dbImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/db.png"));
 
-        containerImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/container.png"));
+        containerImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/container.png"));
 
-        strImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/string.png"));
+        strImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/string.png"));
         strGrayImage = new Image(shell.getDisplay(), strImage, SWT.IMAGE_GRAY);
 
-        setImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/set.png"));
+        setImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/set.png"));
         setGrayImage = new Image(shell.getDisplay(), setImage, SWT.IMAGE_GRAY);
 
-        listImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/list.png"));
+        listImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/list.png"));
         listGrayImage = new Image(shell.getDisplay(), listImage, SWT.IMAGE_GRAY);
 
-        zsetImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/zset.png"));
+        zsetImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/zset.png"));
         zsetGrayImage = new Image(shell.getDisplay(), zsetImage, SWT.IMAGE_GRAY);
 
-        hashImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/hash.png"));
+        hashImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/hash.png"));
         hashGrayImage = new Image(shell.getDisplay(), hashImage, SWT.IMAGE_GRAY);
 
-        leftImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/left.png"));
-        rightImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/right.png"));
-        upImage = new Image(shell.getDisplay(), getClass().getResourceAsStream(
-                "/up.png"));
-        refreshImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/refresh.png"));
+        leftImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/left.png"));
+        rightImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/right.png"));
+        upImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/up.png"));
+        refreshImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/refresh.png"));
 
-        iconImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/icon.png"));
+        iconImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/icon.png"));
 
-        codeImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/code.png"));
+        codeImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/code.png"));
 
-        questionImage = new Image(shell.getDisplay(), getClass()
-                .getResourceAsStream("/question.png"));
+        questionImage = new Image(shell.getDisplay(), getClass().getResourceAsStream("/question.png"));
     }
 
+    /**
+     * 
+     */
     private void initShell() {
         shell = new Shell();
         shell.addListener(SWT.Close, (Event event) -> {
@@ -296,6 +284,9 @@ public class RedisClient {
         shell.setLayout(new GridLayout(1, false));
     }
 
+    /**
+     *  功能按钮初始化
+     */
     private void initSash() {
         Composite composite_1 = new Composite(shell, SWT.NONE);
         GridLayout gl_composite_1 = new GridLayout(1, false);
@@ -304,12 +295,10 @@ public class RedisClient {
         gl_composite_1.marginHeight = 0;
         gl_composite_1.horizontalSpacing = 0;
         composite_1.setLayout(gl_composite_1);
-        composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
-                1, 1));
+        composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
         Composite composite = new Composite(composite_1, SWT.NONE);
-        composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-                1, 1));
+        composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         GridLayout gl_composite = new GridLayout(5, false);
         gl_composite.marginBottom = 5;
         gl_composite.verticalSpacing = 0;
@@ -318,6 +307,7 @@ public class RedisClient {
         gl_composite.marginHeight = 0;
         composite.setLayout(gl_composite);
 
+        //上一个按钮 start
         btnBackward = new Button(composite, SWT.CENTER);
         btnBackward.setEnabled(false);
         btnBackward.addSelectionListener(new SelectionAdapter() {
@@ -332,7 +322,6 @@ public class RedisClient {
                     }
 
                     btnForward.setEnabled(true);
-
                 } else {
                     MessageDialog.openInformation(shell,
                             i18nFile.getText(I18nFile.ERROR),
@@ -341,7 +330,9 @@ public class RedisClient {
             }
         });
         btnBackward.setImage(leftImage);
-
+        //上一个按钮 end
+        
+        //下一个按钮 start
         btnForward = new Button(composite, SWT.NONE);
         btnForward.setEnabled(false);
         btnForward.addSelectionListener(new SelectionAdapter() {
@@ -355,16 +346,15 @@ public class RedisClient {
                     if (!history.canForward()) {
                         btnForward.setEnabled(false);
                     }
-
                 } else {
-                    MessageDialog.openInformation(shell,
-                            i18nFile.getText(I18nFile.ERROR),
-                            i18nFile.getText(I18nFile.OBJECTDELETE));
+                    MessageDialog.openInformation(shell, i18nFile.getText(I18nFile.ERROR), i18nFile.getText(I18nFile.OBJECTDELETE));
                 }
             }
         });
         btnForward.setImage(rightImage);
-
+        //下一层按钮 end
+        
+        //上一层按钮 start 
         Button btnUP = new Button(composite, SWT.CENTER);
         btnUP.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -380,7 +370,9 @@ public class RedisClient {
             }
         });
         btnUP.setImage(upImage);
-
+        //上一层按钮 end
+        
+        //刷新按钮 start
         Button btnRefresh = new Button(composite, SWT.CENTER);
         btnRefresh.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -390,19 +382,23 @@ public class RedisClient {
             }
         });
         btnRefresh.setImage(refreshImage);
-
+        //刷新按钮 end
+        
+        //当前被选中内容展示 Text（只读） start
         text = new Text(composite, SWT.BORDER);
         text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         text.setEditable(false);
-
+        //当前被选中内容展示 Text（只读） end
+        
         final SashForm sashForm = new SashForm(composite_1, SWT.NONE);
-        sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-                1));
+        sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
         initTree(sashForm);
 
+        //初始化根元素
         initRootItem();
 
+        //初始化菜单数据
         initMenuData();
 
         menuTreeDBContainer = initMenuTreeDB();
@@ -531,88 +527,108 @@ public class RedisClient {
         mntmExport_2.setText(i18nFile.getText(I18nFile.EXPORT));
     }
 
+    /**
+     * 初始化菜单数据 （Redis data explorer 右键菜单） ？？？确定是这样吗？
+     */
     private void initMenuData() {
-        menu_key = new Menu(shell);
+        menuDataExplorer = new Menu(shell);
 
-        MenuItem mntmRename = new MenuItem(menu_key, SWT.NONE);
-        mntmRename.addSelectionListener(new SelectionAdapter() {
+        //Redis data explorer 右键菜单 => Rename start
+        MenuItem menuDataExplorerRename = new MenuItem(menuDataExplorer, SWT.NONE);
+        menuDataExplorerRename.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 renameKey();
             }
         });
-        mntmRename.setText(i18nFile.getText(I18nFile.RENAME));
-
-        MenuItem mntmDelete_4 = new MenuItem(menu_key, SWT.NONE);
-        mntmDelete_4.addSelectionListener(new SelectionAdapter() {
+        menuDataExplorerRename.setText(i18nFile.getText(I18nFile.RENAME));
+        //Redis data explorer 右键菜单 => Rename end
+        
+        //Redis data explorer 右键菜单 => Delete start
+        MenuItem menuDataExplorerDelete = new MenuItem(menuDataExplorer, SWT.NONE);
+        menuDataExplorerDelete.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 deleteOneKey();
             }
         });
-        mntmDelete_4.setText(i18nFile.getText(I18nFile.DELETE));
-
-        MenuItem mntmProperties_1 = new MenuItem(menu_key, SWT.NONE);
-        mntmProperties_1.addSelectionListener(new SelectionAdapter() {
+        menuDataExplorerDelete.setText(i18nFile.getText(I18nFile.DELETE));
+        //Redis data explorer 右键菜单 => Delete end
+        
+        //Redis data explorer 右键菜单 => Properties start
+        MenuItem menuDataExplorerProperties = new MenuItem(menuDataExplorer, SWT.NONE);
+        menuDataExplorerProperties.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 dataProperties();
 
             }
         });
-        mntmProperties_1.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        menuDataExplorerProperties.setText(i18nFile.getText(I18nFile.PROPERTIES));
+        //Redis data explorer 右键菜单 => Properties end
+        
+        new MenuItem(menuDataExplorer, SWT.SEPARATOR);//分隔符
 
-        new MenuItem(menu_key, SWT.SEPARATOR);
-
-        MenuItem menuItem = new MenuItem(menu_key, SWT.NONE);
-        menuItem.addSelectionListener(new SelectionAdapter() {
+        //Redis data explorer 右键菜单 => Add to favorites start
+        MenuItem menuDataExplorerAddFavorites = new MenuItem(menuDataExplorer, SWT.NONE);
+        menuDataExplorerAddFavorites.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 addFavorite();
             }
         });
-        menuItem.setText(i18nFile.getText(I18nFile.ADDFAVORITES));
-
-        new MenuItem(menu_key, SWT.SEPARATOR);
-
-        MenuItem mntmCut_1 = new MenuItem(menu_key, SWT.NONE);
-        mntmCut_1.addSelectionListener(new SelectionAdapter() {
+        menuDataExplorerAddFavorites.setText(i18nFile.getText(I18nFile.ADDFAVORITES));
+        //Redis data explorer 右键菜单 => Add to favorites end
+        
+        new MenuItem(menuDataExplorer, SWT.SEPARATOR);//分隔符
+        
+        //Redis data explorer 右键菜单 => Cut start
+        MenuItem menuDataExplorerCut = new MenuItem(menuDataExplorer, SWT.NONE);
+        menuDataExplorerCut.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 cut();
             }
         });
-        mntmCut_1.setText(i18nFile.getText(I18nFile.CUT));
-
-        MenuItem mntmCopy_2 = new MenuItem(menu_key, SWT.NONE);
-        mntmCopy_2.addSelectionListener(new SelectionAdapter() {
+        menuDataExplorerCut.setText(i18nFile.getText(I18nFile.CUT));
+        //Redis data explorer 右键菜单 => Cut end
+        
+        //Redis data explorer 右键菜单 => Copy start
+        MenuItem menuDataExplorerCopy = new MenuItem(menuDataExplorer, SWT.NONE);
+        menuDataExplorerCopy.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 copy();
             }
         });
-        mntmCopy_2.setText(i18nFile.getText(I18nFile.COPY));
+        menuDataExplorerCopy.setText(i18nFile.getText(I18nFile.COPY));
+        //Redis data explorer 右键菜单 => Copy start
+        
+        new MenuItem(menuDataExplorer, SWT.SEPARATOR);//分隔符
 
-        new MenuItem(menu_key, SWT.SEPARATOR);
-
-        MenuItem mntmExport_3 = new MenuItem(menu_key, SWT.NONE);
-        mntmExport_3.addSelectionListener(new SelectionAdapter() {
+        //Redis data explorer 右键菜单 => Export start
+        MenuItem menuDataExplorerExport = new MenuItem(menuDataExplorer, SWT.NONE);
+        menuDataExplorerExport.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 export();
             }
 
         });
-        mntmExport_3.setText(i18nFile.getText(I18nFile.EXPORT));
+        menuDataExplorerExport.setText(i18nFile.getText(I18nFile.EXPORT));
+        //Redis data explorer 右键菜单 => Export end
     }
 
+    /**
+     * 
+     * @param sashForm 
+     */
     private void initTree(SashForm sashForm) {
         tree = new Tree(sashForm, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
         tree.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 selectTreeItem();
-
             }
         });
         tree.addMouseListener(new MouseAdapter() {
@@ -657,6 +673,9 @@ public class RedisClient {
         });
     }
 
+    /**
+     * 初始化根元素
+     */
     private void initRootItem() {
         rootRedisServers = new TreeItem(tree, SWT.NONE);
         rootRedisServers.setImage(redisImage);
@@ -695,6 +714,10 @@ public class RedisClient {
         }
     }
 
+    /**
+     * 
+     * @return 
+     */
     private Menu initMenuTreeDB() {
         Menu tableDbMenu = initMenuTableDB();
 
@@ -714,6 +737,10 @@ public class RedisClient {
         return tableDbMenu;
     }
 
+    /**
+     * 
+     * @return 
+     */
     private Menu initMenuTableDB() {
         Menu menu_dbContainer = new Menu(shell);
 
@@ -989,7 +1016,7 @@ public class RedisClient {
                                 default: {
                                     TableItem[] items = table.getSelection();
                                     if (items.length == 1) {
-                                        table.setMenu(menu_key);
+                                        table.setMenu(menuDataExplorer);
                                     } else {
                                         table.setMenu(menu_Multi);
                                     }
@@ -1988,11 +2015,11 @@ public class RedisClient {
         MenuItem topMenuItemTools = new MenuItem(menu, SWT.CASCADE);
         topMenuItemTools.setText(i18nFile.getText(I18nFile.TOOL));
 
-        menuTool = new Menu(topMenuItemTools);
-        topMenuItemTools.setMenu(menuTool);
+        menuTools = new Menu(topMenuItemTools);
+        topMenuItemTools.setMenu(menuTools);
 
         //Tools =》 Console start
-        MenuItem menuToolsConsole = new MenuItem(menuTool, SWT.NONE);
+        MenuItem menuToolsConsole = new MenuItem(menuTools, SWT.NONE);
         menuToolsConsole.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -2003,7 +2030,7 @@ public class RedisClient {
         //Tools =》 Console end
         
         //Tools =》 Publish start
-        MenuItem menuToolsPublish = new MenuItem(menuTool, SWT.NONE);
+        MenuItem menuToolsPublish = new MenuItem(menuTools, SWT.NONE);
         menuToolsPublish.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -2014,7 +2041,7 @@ public class RedisClient {
         //Tools =》 Publish end
         
         //Tools =》 Subscribe start
-        MenuItem menuToolsSubscribe = new MenuItem(menuTool, SWT.NONE);
+        MenuItem menuToolsSubscribe = new MenuItem(menuTools, SWT.NONE);
         menuToolsSubscribe.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -2024,10 +2051,10 @@ public class RedisClient {
         menuToolsSubscribe.setText(i18nFile.getText(I18nFile.SUBSCRIBE));
         //Tools =》 Subscribe end
         
-        new MenuItem(menuTool, SWT.SEPARATOR);//分隔符
+        new MenuItem(menuTools, SWT.SEPARATOR);//分隔符
 
         //Tools =》 Options start
-        MenuItem menuToolsOptions = new MenuItem(menuTool, SWT.NONE);
+        MenuItem menuToolsOptions = new MenuItem(menuTools, SWT.NONE);
         menuToolsOptions.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -2659,11 +2686,9 @@ public class RedisClient {
 
         NodeType type = (NodeType) itemSelected.getData(NODE_TYPE);
         if (!(type == NodeType.CONTAINER && flatView)) {
-            Set<Node> cnodes = nodeService.listContainers(info.getId(),
-                    info.getDb(), info.getContainerStr(), flatView);
+            Set<Node> cnodes = nodeService.listContainers(info.getId(), info.getDb(), info.getContainerStr(), flatView);
 
-            if (itemSelected.getData(ITEM_OPENED) == null
-                    || ((Boolean) (itemSelected.getData(ITEM_OPENED)) == false)) {
+            if (itemSelected.getData(ITEM_OPENED) == null || ((Boolean) (itemSelected.getData(ITEM_OPENED)) == false)) {
                 itemSelected.removeAll();
 
                 for (Node node : cnodes) {
@@ -2725,6 +2750,10 @@ public class RedisClient {
         return false;
     }
 
+    /**
+     * 选中db container item 处理菜单enable属性
+     * @param itemSelected 
+     */
     private void dbContainerItemSelected(Item itemSelected) {
         menuServer.getItem(1).setEnabled(false);
         menuServer.getItem(2).setEnabled(false);
@@ -2768,36 +2797,34 @@ public class RedisClient {
 
         menuFavorite.getItem(0).setEnabled(true);
 
-        menuTool.getItem(0).setEnabled(false);
-        menuTool.getItem(1).setEnabled(false);
-        menuTool.getItem(2).setEnabled(false);
+        menuTools.getItem(0).setEnabled(false);
+        menuTools.getItem(1).setEnabled(false);
+        menuTools.getItem(2).setEnabled(false);
     }
 
+    /**
+     * 选中table item order 处理菜单enable属性
+     * @param info 
+     */
     private void tableItemOrderSelected(ContainerKeyInfo info) {
         table.removeAll();
 
         if (!flatView) {
-            Set<Node> cnodes = nodeService
-                    .listContainers(info.getId(), info.getDb(),
-                            info.getContainerStr(), flatView, clientOrder);
+            Set<Node> cnodes = nodeService.listContainers(info.getId(), info.getDb(), info.getContainerStr(), flatView, clientOrder);
 
             for (Node node : cnodes) {
                 TableItem item = new TableItem(table, SWT.NONE);
-                item.setText(new String[]{node.getKey(),
-                    node.getType().toString()});
+                item.setText(new String[]{node.getKey(), node.getType().toString()});
                 item.setImage(containerImage);
                 item.setData(NODE_TYPE, node.getType());
             }
         }
 
-        Set<DataNode> knodes = nodeService.listContainerKeys(info.getId(),
-                info.getDb(), info.getContainerStr(), false, clientOrder,
-                clientOrderBy);
+        Set<DataNode> knodes = nodeService.listContainerKeys(info.getId(), info.getDb(), info.getContainerStr(), false, clientOrder, clientOrderBy);
 
         for (DataNode node1 : knodes) {
             TableItem item = new TableItem(table, SWT.NONE);
-            item.setText(new String[]{node1.getKey(),
-                node1.getType().toString(), String.valueOf(node1.getSize())});
+            item.setText(new String[]{node1.getKey(), node1.getType().toString(), String.valueOf(node1.getSize())});
             switch (node1.getType()) {
                 case STRING:
                     if (node1.isPersist()) {
@@ -2841,6 +2868,10 @@ public class RedisClient {
         }
     }
 
+    /**
+     * 选中root tree item 处理菜单enable属性
+     * @param refresh 
+     */
     private void rootTreeItemSelected(boolean refresh) {
         itemsSelected = new Item[]{rootRedisServers};
         tree.setSelection(rootRedisServers);
@@ -2849,8 +2880,7 @@ public class RedisClient {
 
         rootItemSelected();
 
-        if (rootRedisServers.getData(ITEM_OPENED) == null
-                || ((Boolean) (rootRedisServers.getData(ITEM_OPENED)) == false)) {
+        if (rootRedisServers.getData(ITEM_OPENED) == null || ((Boolean) (rootRedisServers.getData(ITEM_OPENED)) == false)) {
             rootRedisServers.removeAll();
             initServers();
         } else if (refresh) {
@@ -2861,8 +2891,7 @@ public class RedisClient {
 
         for (Server server : servers) {
             TableItem item = new TableItem(table, SWT.NONE);
-            item.setText(new String[]{server.getName(),
-                NodeType.SERVER.toString()});
+            item.setText(new String[]{server.getName(), NodeType.SERVER.toString()});
             item.setImage(redisImage);
             item.setData(NODE_ID, server.getId());
             item.setData(NODE_TYPE, NodeType.SERVER);
@@ -2871,7 +2900,11 @@ public class RedisClient {
         mainTabItem.setImage(redisImage);
     }
 
+    /**
+     * 选中root项目 处理菜单enable属性
+     */
     private void rootItemSelected() {
+        
         menuServer.getItem(1).setEnabled(false);
         menuServer.getItem(2).setEnabled(false);
         menuServer.getItem(3).setEnabled(false);
@@ -2891,11 +2924,16 @@ public class RedisClient {
 
         menuFavorite.getItem(0).setEnabled(false);
 
-        menuTool.getItem(0).setEnabled(false);
-        menuTool.getItem(1).setEnabled(false);
-        menuTool.getItem(2).setEnabled(false);
+        menuTools.getItem(0).setEnabled(false);
+        menuTools.getItem(1).setEnabled(false);
+        menuTools.getItem(2).setEnabled(false);
     }
 
+    /**
+     * 选中server tree item  处理菜单enable属性
+     * @param selectedItem
+     * @param refresh 
+     */
     private void serverTreeItemSelected(TreeItem selectedItem, boolean refresh) {
         itemsSelected = new Item[]{selectedItem};
         tree.setSelection(selectedItem);
@@ -2935,6 +2973,9 @@ public class RedisClient {
         mainTabItem.setImage(redisImage);
     }
 
+    /**
+     * 选中server item 处理菜单enable属性
+     */
     private void serverItemSelected() {
         menuServer.getItem(1).setEnabled(true);
         menuServer.getItem(2).setEnabled(true);
@@ -2955,9 +2996,9 @@ public class RedisClient {
 
         menuFavorite.getItem(0).setEnabled(false);
 
-        menuTool.getItem(0).setEnabled(true);
-        menuTool.getItem(1).setEnabled(true);
-        menuTool.getItem(2).setEnabled(true);
+        menuTools.getItem(0).setEnabled(true);
+        menuTools.getItem(1).setEnabled(true);
+        menuTools.getItem(2).setEnabled(true);
     }
 
     private void newString() {
@@ -3543,7 +3584,7 @@ public class RedisClient {
         menu.dispose();
         initMenu();
         rootRedisServers.setText(i18nFile.getText(I18nFile.REDISSERVERS));
-        menu_key.dispose();
+        menuDataExplorer.dispose();
         initMenuData();
         menuTreeDBContainer.dispose();
         menuTreeDBContainer = initMenuTreeDB();
